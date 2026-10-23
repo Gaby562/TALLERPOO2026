@@ -16,7 +16,7 @@ public class Medicion{
         this.milimetros= milimetros;
         this.anomala= anomala;
     }
-
+    
     public void setIdMedicion(String idMedicion){
          this.idMedicion= idMedicion;
     }

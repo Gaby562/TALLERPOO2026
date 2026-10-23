@@ -6,7 +6,7 @@ public class Mantenimiento{
     private LocalDate fecha;
     private TipoMantenimiento tipo;
     private String descripcion;
-
+    // relaciones
     private Sensor sensor;
     private ResponsableTecnico responsable;
 
@@ -64,6 +64,10 @@ public class Mantenimiento{
     }
     public void setResponsable(ResponsableTecnico responsable) { 
         this.responsable = responsable; 
+    }
+    @Override
+    public String toString() {
+        return "Mantenimiento [idMantenimiento=" + idMantenimiento + ", fecha=" + fecha + ", tipo=" + tipo + ", descripcion=" + descripcion + ", sensor=" + sensor + ", responsable=" + responsable + "]";
     }
 
     
