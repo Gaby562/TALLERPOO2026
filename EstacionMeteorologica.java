@@ -13,10 +13,10 @@ public class EstacionMeteorologica {
     private TipoEstacion tipo;
 
     // relaciones 
-    private List<Sensor> sensores; //la estacion puede tener 0 o varios
-    private ResponsableTecnico responsable; //cada estacion tiene 1 responsable
+    private List<Sensor> sensores; //la estacion puede tener 0 o varios. Tambien represento aca la agregacion entre estacion y sensor
+    private ResponsableTecnico responsable; //cada estacion tiene 1 responsable. Representa la relacion unidireccional con estacion
     private ZonaGeografica zona; //porque cada estacion pertenece a 1 zona
-    private List<Mantenimiento> mantenimientos; //la estacion puede tener ninguno o varios
+    private List<Mantenimiento> mantenimientos; //la estacion puede tener ninguno o varios.Tambien aca se representa la composicion entre estacion y mantenimiento
 
     public EstacionMeteorologica() {
         this.sensores = new ArrayList<>(); //lista vacia porq puede no tener ninguno
@@ -125,21 +125,21 @@ public class EstacionMeteorologica {
         this.mantenimientos = mantenimientos;
     }
 
-    //metodo instalar q agrega el sensor a la lista si no es null y todavía no esta en ella
+    //metodo instalar que agrega el sensor a la lista si no es null y todavía no esta en ella
     public void instalarSensor(Sensor s) {
         if (s != null && !sensores.contains(s)) {
             sensores.add(s);
         }
     }
 
-    //metodo retirar q elimina el sensor de la lista si es que esta
+    //metodo retirar que elimina el sensor de la lista si es que esta
     public void retirarSensor(Sensor s) {
         if (s != null) {
             sensores.remove(s);
         }
     }
 
-    //metodo estaOperativa? q devuelve true o false
+    //metodo estaOperativa? devuelve true o false
     public boolean estaOperativa() {
         return estado == EstadoOperativo.OPERATIVO;
     }
