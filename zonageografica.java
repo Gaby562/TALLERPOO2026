@@ -27,7 +27,7 @@ public class ZonaGeografica {
         this.alertas = new ArrayList<>();
     }
 
-    public ZonaGeografica(String idZona, String nombre, NivelVulnerabilidad nivelVulnerabilidad, double umbralAmarilla, double umbralNaranja, double umbralRoja)throws IllegalArgumentException{
+    public ZonaGeografica(String idZona, String nombre, NivelVulnerabilidad nivelVulnerabilidad, double umbralAmarilla, double umbralNaranja, double umbralRoja){
         // Se valida antes de guardar: amarilla < naranja < roja
         if (!(umbralAmarilla < umbralNaranja && umbralNaranja < umbralRoja)) {
             throw new IllegalArgumentException("Los umbrales deben cumplir: amarilla < naranja < roja.");
@@ -72,42 +72,25 @@ public class ZonaGeografica {
         return umbralAmarilla;
     }
 
-    // Cambia el umbral amarillo, validando que quede menor que el naranja
-    public void setUmbralAmarilla(double umbralAmarilla) {
-        if (umbralAmarilla >= this.umbralNaranja) {
-            throw new IllegalArgumentException(
-                "El umbral amarilla debe ser menor que el naranja (" + this.umbralNaranja + ").");
-        }
-        this.umbralAmarilla = umbralAmarilla;
-    }
-
     public double getUmbralNaranja() {
         return umbralNaranja;
-    }
-
-    // Cambia el umbral naranja, validando que quede entre el amarillo y el rojo
-    public void setUmbralNaranja(double umbralNaranja) {
-        if (umbralNaranja <= this.umbralAmarilla || umbralNaranja >= this.umbralRoja) {
-            throw new IllegalArgumentException(
-                "El umbral naranja debe estar entre la amarilla (" + this.umbralAmarilla
-                + ") y la roja (" + this.umbralRoja + ").");
-        }
-        this.umbralNaranja = umbralNaranja;
     }
 
     public double getUmbralRoja() {
         return umbralRoja;
     }
 
-    // Cambia el umbral rojo, validando que quede mayor que el naranja
-    public void setUmbralRoja(double umbralRoja) {
-        if (umbralRoja <= this.umbralNaranja) {
+    // Cambia los tres umbrales a la vez, validando el orden
+    public void setUmbrales(double amarilla, double naranja, double roja) {
+        if (!(amarilla < naranja && naranja < roja)) {
             throw new IllegalArgumentException(
-                "El umbral roja debe ser mayor que la naranja (" + this.umbralNaranja + ").");
+                "Los umbrales deben cumplir: amarilla < naranja < roja.");
         }
-        this.umbralRoja = umbralRoja;
+        this.umbralAmarilla = amarilla;
+        this.umbralNaranja = naranja;
+        this.umbralRoja = roja;
     }
-
+    
     public NivelAlerta getNivelAlertaActual() {
         return nivelAlertaActual;
     }
@@ -153,7 +136,8 @@ public class ZonaGeografica {
         ValorHistorico v = new ValorHistorico(mes, acumuladoMedio);
         valoresHistoricos.add(v);
     }
-    
+
+    // Suma los mm de las últimas 24 h de todos los sensores de todas las estaciones de la zona    
     public double lluviaAcumulada24h() {
         LocalDateTime ahora = LocalDateTime.now();
         LocalDateTime desde = ahora.minusHours(24);
