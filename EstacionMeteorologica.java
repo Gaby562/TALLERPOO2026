@@ -1,6 +1,9 @@
 import enums.EstadoOperativo;
 import enums.TipoEstacion;
+import enums.TipoMantenimiento;
+
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class EstacionMeteorologica {
@@ -142,6 +145,16 @@ public class EstacionMeteorologica {
     //metodo estaOperativa? devuelve true o false
     public boolean estaOperativa() {
         return estado == EstadoOperativo.OPERATIVO;
+    }
+
+    // Crea un mantenimiento y lo agrega a la lista de la estación (composición)
+    public Mantenimiento registrarMantenimiento(String id, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor sensor, ResponsableTecnico responsable) {
+        // La estación es quien crea el mantenimiento
+        Mantenimiento m = new Mantenimiento(id, fecha, tipo, descripcion, sensor, responsable);
+        // Lo guarda en su lista de mantenimientos
+        this.mantenimientos.add(m);
+        // Devuelve el mantenimiento creado
+        return m;
     }
 
     @Override 
