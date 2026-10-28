@@ -89,9 +89,14 @@ public class Sensor {
     //y la agrega a la lista donde esta el historial, con su fecha y hora
 
     //IMPORTANTE A REVISAR DESPUES: no se pueden registrar lecturas si el sensor o la estación estan en mantenimiento o fuera de servicio
-    public Medicion registrar(double mm, LocalDateTime fh)
-        throws LecturaInvalidaException {
-
+    public Medicion registrar(double mm, LocalDateTime fh) throws LecturaInvalidaException {
+       
+        // Control operativo: el sensor tiene que estar OPERATIVO
+        if (estado != EstadoOperativo.OPERATIVO) {
+            throw new LecturaInvalidaException(
+                "El sensor " + idSensor + " no está operativo (estado: " + estado + ").");
+        }
+        // Validación del rango físico (0 a 500 mm)
         if (!validar(mm)) {
             throw new LecturaInvalidaException(
                 "Los milímetros deben estar entre 0 y 500."
@@ -107,8 +112,8 @@ public class Sensor {
                 anomala = true; //y si es anomala la registramos sin descartarla
             }
         }
-
-        String id = "M" + (mediciones.size() + 1);
+        // El id incluye el sensor para que no se repita entre sensores distintos
+        String id = idSensor + "-M" + (mediciones.size() + 1);
         Medicion nueva = new Medicion(id, fh, mm, anomala);
         mediciones.add(nueva); //guardamos la medicion a la lista del historial
         return nueva; //y devolvemos la medicion que se creo
