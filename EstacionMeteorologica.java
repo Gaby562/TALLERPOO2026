@@ -1,10 +1,9 @@
 import enums.EstadoOperativo;
 import enums.TipoEstacion;
 import enums.TipoMantenimiento;
-
-import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EstacionMeteorologica {
     private String idEstacion;
@@ -18,7 +17,6 @@ public class EstacionMeteorologica {
     // relaciones 
     private List<Sensor> sensores; //la estacion puede tener 0 o varios. Tambien represento aca la agregacion entre estacion y sensor
     private ResponsableTecnico responsable; //cada estacion tiene 1 responsable. Representa la relacion unidireccional con estacion
-    private ZonaGeografica zona; //porque cada estacion pertenece a 1 zona
     private List<Mantenimiento> mantenimientos; //la estacion puede tener ninguno o varios.Tambien aca se representa la composicion entre estacion y mantenimiento
 
     public EstacionMeteorologica() {
@@ -26,7 +24,7 @@ public class EstacionMeteorologica {
         this.mantenimientos = new ArrayList<>(); //lo mismo que sensores
     }
 
-    public EstacionMeteorologica(String idEstacion, String nombre, double latitud, double longitud, double altitud, EstadoOperativo estado, TipoEstacion tipo, ResponsableTecnico responsable, ZonaGeografica zona) {
+    public EstacionMeteorologica(String idEstacion, String nombre, double latitud, double longitud, double altitud, EstadoOperativo estado, TipoEstacion tipo, ResponsableTecnico responsable) {
         this.idEstacion = idEstacion;
         this.nombre = nombre;
         this.latitud = latitud;
@@ -35,7 +33,6 @@ public class EstacionMeteorologica {
         this.estado = estado;
         this.tipo = tipo;
         this.responsable = responsable;
-        this.zona = zona;
         this.sensores = new ArrayList<>();
         this.mantenimientos = new ArrayList<>();
     }
@@ -112,14 +109,6 @@ public class EstacionMeteorologica {
         this.responsable = responsable;
     }
 
-    public ZonaGeografica getZona() {
-        return zona;
-    }
-
-    public void setZona(ZonaGeografica zona) {
-        this.zona = zona;
-    }
-
     public List<Mantenimiento> getMantenimientos() {
         return mantenimientos;
     }
@@ -168,7 +157,6 @@ public class EstacionMeteorologica {
             "Estado operativo: " + estado + "\n" +
             "Tipo de estación: " + tipo + "\n" +
             "Responsable técnico: " + responsable + "\n" +
-            "Zona geográfica: " + zona + "\n" +
             "Sensores: " + sensores + "\n" +
             "Mantenimientos registrados: " + mantenimientos;
     }
