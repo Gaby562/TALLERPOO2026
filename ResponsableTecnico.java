@@ -6,7 +6,7 @@ public class ResponsableTecnico extends Persona{
 
     }
 
-    public ResponsableTecnico (String dni, String nombre, String apellido, String correo, String celular, String especialidad, String numeroLicencia){
+    public ResponsableTecnico (int dni, String nombre, String apellido, String correo, String celular, String especialidad, String numeroLicencia){
         super(dni, nombre, apellido, correo, celular);
         this.especialidad= especialidad;
         this.numeroLicencia= numeroLicencia;
@@ -26,9 +26,12 @@ public class ResponsableTecnico extends Persona{
         return numeroLicencia;
     }
 
-    @Override 
-    public String toString() { 
-        return "ResponsableTecnico{" + super.toString() + ", especialidad: " + especialidad + ", licencia: " + numeroLicencia + "}"; 
+    @Override
+    public String toString() {
+        return "RESPONSABLE TÉCNICO\n" +
+            super.toString() + "\n" +
+            "Especialidad: " + especialidad + "\n" +
+            "Licencia: " + numeroLicencia;
     }
 
 }

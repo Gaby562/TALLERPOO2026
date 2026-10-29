@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstacionMeteorologica {
-    private String idEstacion;
+    private int idEstacion;
     private String nombre;
     private double latitud;
     private double longitud;
@@ -24,7 +24,7 @@ public class EstacionMeteorologica {
         this.mantenimientos = new ArrayList<>(); //lo mismo que sensores
     }
 
-    public EstacionMeteorologica(String idEstacion, String nombre, double latitud, double longitud, double altitud, EstadoOperativo estado, TipoEstacion tipo, ResponsableTecnico responsable) {
+    public EstacionMeteorologica(int idEstacion, String nombre, double latitud, double longitud, double altitud, EstadoOperativo estado, TipoEstacion tipo, ResponsableTecnico responsable) {
         this.idEstacion = idEstacion;
         this.nombre = nombre;
         this.latitud = latitud;
@@ -37,11 +37,11 @@ public class EstacionMeteorologica {
         this.mantenimientos = new ArrayList<>();
     }
 
-    public String getIdEstacion (){
+    public int getIdEstacion (){
         return idEstacion;
     }
 
-    public void setIdEstacion(String idEstacion){
+    public void setIdEstacion(int idEstacion){
         this.idEstacion = idEstacion;
     }
 
@@ -137,7 +137,7 @@ public class EstacionMeteorologica {
     }
 
     // Crea un mantenimiento y lo agrega a la lista de la estación (composición)
-    public Mantenimiento registrarMantenimiento(String id, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor sensor, ResponsableTecnico responsable) {
+    public Mantenimiento registrarMantenimiento(int id, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor sensor, ResponsableTecnico responsable) {
         // La estación es quien crea el mantenimiento
         Mantenimiento m = new Mantenimiento(id, fecha, tipo, descripcion, sensor, responsable);
         // Lo guarda en su lista de mantenimientos
@@ -146,19 +146,19 @@ public class EstacionMeteorologica {
         return m;
     }
 
-    @Override 
-    public String toString(){
+    @Override
+    public String toString() {
         return "ESTACIÓN METEOROLÓGICA\n" +
             "ID de la estación: " + idEstacion + "\n" +
-            "Nombre de la estación: " + nombre + "\n" +
+            "Nombre: " + nombre + "\n" +
             "Latitud: " + latitud + "\n" +
             "Longitud: " + longitud + "\n" +
             "Altitud: " + altitud + " metros\n" +
             "Estado operativo: " + estado + "\n" +
             "Tipo de estación: " + tipo + "\n" +
-            "Responsable técnico: " + responsable + "\n" +
-            "Sensores: " + sensores + "\n" +
-            "Mantenimientos registrados: " + mantenimientos;
+            "Responsable técnico: " + (responsable != null ? responsable.getNombreCompleto() : "sin asignar") + "\n" +
+            "Cantidad de sensores: " + sensores.size() + "\n" +
+            "Cantidad de mantenimientos: " + mantenimientos.size();
     }
 
 }

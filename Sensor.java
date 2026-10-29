@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Sensor {
-    private String idSensor;
+    private int idSensor;
     private String marca;
     private String modelo;
     private double precision;
@@ -19,7 +19,7 @@ public class Sensor {
         this.mediciones = new ArrayList<>(); //lista vacia porq cada sensor puede tener cero
     }
 
-    public Sensor(String idSensor, String marca, String modelo, double precision, EstadoOperativo estado, LocalDate ultimaCalibracion) {
+    public Sensor(int idSensor, String marca, String modelo, double precision, EstadoOperativo estado, LocalDate ultimaCalibracion) {
         this.idSensor = idSensor;
         this.marca = marca;
         this.modelo = modelo;
@@ -29,11 +29,11 @@ public class Sensor {
         this.mediciones = new ArrayList<>();
     }
  
-    public String getIdSensor() {
+    public int getIdSensor() {
         return idSensor;
     }
 
-    public void setIdSensor(String idSensor) {
+    public void setIdSensor(int idSensor) {
         this.idSensor = idSensor;
     }
 
@@ -113,7 +113,7 @@ public class Sensor {
             }
         }
         // El id incluye el sensor para que no se repita entre sensores distintos
-        String id = idSensor + "-M" + (mediciones.size() + 1);
+        int id = mediciones.size() + 1;
         Medicion nueva = new Medicion(id, fh, mm, anomala);
         mediciones.add(nueva); //guardamos la medicion a la lista del historial
         return nueva; //y devolvemos la medicion que se creo
@@ -136,15 +136,14 @@ public class Sensor {
 
     @Override
     public String toString() {
-        return "SENSOR METEOROLÓGICO\n" +
+        return "SENSOR\n" +
             "ID del sensor: " + idSensor + "\n" +
             "Marca: " + marca + "\n" +
             "Modelo: " + modelo + "\n" +
             "Precisión: " + precision + "\n" +
             "Estado operativo: " + estado + "\n" +
             "Última calibración: " + ultimaCalibracion + "\n" +
-            "Mediciones registradas: " + mediciones;
+            "Cantidad de mediciones: " + mediciones.size();
     }
 }
         
-

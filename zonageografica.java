@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ZonaGeografica {
-    private String idZona;
+    private int idZona;
     private String nombre;
     private NivelVulnerabilidad nivelVulnerabilidad;
     private double umbralAmarilla;
@@ -27,7 +27,7 @@ public class ZonaGeografica {
         this.alertas = new ArrayList<>();
     }
 
-    public ZonaGeografica(String idZona, String nombre, NivelVulnerabilidad nivelVulnerabilidad, double umbralAmarilla, double umbralNaranja, double umbralRoja){
+    public ZonaGeografica(int idZona, String nombre, NivelVulnerabilidad nivelVulnerabilidad, double umbralAmarilla, double umbralNaranja, double umbralRoja){
         // Se valida antes de guardar: amarilla < naranja < roja
         if (!(umbralAmarilla < umbralNaranja && umbralNaranja < umbralRoja)) {
             throw new IllegalArgumentException("Los umbrales deben cumplir: amarilla < naranja < roja.");
@@ -44,11 +44,11 @@ public class ZonaGeografica {
         this.alertas = new ArrayList<>();
     }
 
-    public String getIdZona() {
+    public int getIdZona() {
         return idZona;
     }
 
-    public void setIdZona(String idZona) {
+    public void setIdZona(int idZona) {
         this.idZona = idZona;
     }
 
@@ -189,7 +189,7 @@ public class ZonaGeografica {
     // Emite una alerta con nivel y descripción indicados por un operador
     // (casos CRECIDA_RIO y TORMENTA_SEVERA)
     public Alerta emitirAlerta(TipoEventoClimatico ev, NivelAlerta nivel, String descripcion) {
-        String id = idZona + "-A" + (alertas.size() + 1);
+        int id = alertas.size() + 1;
         Alerta a = new Alerta(id, LocalDateTime.now(), nivel, ev, descripcion);
         alertas.add(a);
         return a;

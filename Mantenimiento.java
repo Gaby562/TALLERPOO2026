@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import enums.TipoMantenimiento; 
 
 public class Mantenimiento{
-    private String idMantenimiento;
+    private int idMantenimiento;
     private LocalDate fecha;
     private TipoMantenimiento tipo;
     private String descripcion;
@@ -13,7 +13,7 @@ public class Mantenimiento{
     public Mantenimiento(){
 
     }
-    public Mantenimiento(String idMantenimiento, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor sensor, ResponsableTecnico responsable) {
+    public Mantenimiento(int idMantenimiento, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor sensor, ResponsableTecnico responsable) {
         this.idMantenimiento = idMantenimiento;
         this.fecha = fecha;
         this.tipo = tipo;
@@ -21,11 +21,11 @@ public class Mantenimiento{
         this.sensor = sensor;
         this.responsable = responsable;
     }
-    public String getIdMantenimiento() {
+    public int getIdMantenimiento() {
         return idMantenimiento;
     }
 
-    public void setIdMantenimiento(String idMantenimiento) {
+    public void setIdMantenimiento(int idMantenimiento) {
         this.idMantenimiento = idMantenimiento; 
     }
 
@@ -65,11 +65,16 @@ public class Mantenimiento{
     public void setResponsable(ResponsableTecnico responsable) { 
         this.responsable = responsable; 
     }
+    
     @Override
     public String toString() {
-        return "Mantenimiento [idMantenimiento=" + idMantenimiento + ", fecha=" + fecha + ", tipo=" + tipo + ", descripcion=" + descripcion + ", sensor=" + sensor + ", responsable=" + responsable + "]";
+        return "MANTENIMIENTO\n" +
+            "ID del mantenimiento: " + idMantenimiento + "\n" +
+            "Fecha: " + fecha + "\n" +
+            "Tipo: " + tipo + "\n" +
+            "Descripción: " + descripcion + "\n" +
+            "Sensor: " + (sensor != null ? String.valueOf(sensor.getIdSensor()) : "sin sensor") + "\n" +
+            "Responsable: " + (responsable != null ? responsable.getNombreCompleto() : "sin asignar");
     }
-
     
-
 }

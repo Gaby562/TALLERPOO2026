@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class EquipoRespuesta{
-    private String idEquipo;
+    private int idEquipo;
     private String nombreEquipo;
     private boolean disponible;
     private List<ResponsableTecnico> integrantes;
@@ -11,7 +11,7 @@ public class EquipoRespuesta{
         this.integrantes= new ArrayList<ResponsableTecnico>();
     }
 
-    public EquipoRespuesta(String idEquipo, String nombreEquipo, boolean disponible){
+    public EquipoRespuesta(int idEquipo, String nombreEquipo, boolean disponible){
         this.idEquipo=idEquipo;
         this.nombreEquipo=nombreEquipo;
         this.disponible=disponible;
@@ -30,11 +30,11 @@ public class EquipoRespuesta{
         this.integrantes = integrantes;
     }
 
-    public String getIdEquipo() {
+    public int getIdEquipo() {
         return idEquipo;
     }
 
-    public void setIdEquipo(String idEquipo) {
+    public void setIdEquipo(int idEquipo) {
         this.idEquipo = idEquipo;
     }
 
@@ -56,8 +56,16 @@ public class EquipoRespuesta{
 
     @Override
     public String toString() {
-        return "EquipoRespuesta{idEquipo: " + idEquipo + ", nombreEquipo: " + nombreEquipo + ", disponible: " + disponible + ", integrantes=" + integrantes + "}";
+        // Solo se muestran los nombres de los integrantes
+        String nombres = "";
+        for (ResponsableTecnico r : integrantes) {
+            nombres += r.getNombreCompleto() + "; ";
+        }
+        return "EQUIPO DE RESPUESTA\n" +
+            "ID del equipo: " + idEquipo + "\n" +
+            "Nombre: " + nombreEquipo + "\n" +
+            "Disponible: " + (disponible ? "Sí" : "No") + "\n" +
+            "Integrantes: " + (integrantes.isEmpty() ? "ninguno" : nombres);
     }
 
-    
 }

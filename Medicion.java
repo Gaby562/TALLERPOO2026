@@ -2,7 +2,7 @@ import java.time.LocalDateTime;
 
 
 public class Medicion{
-    private String idMedicion;
+    private int idMedicion;
     private LocalDateTime fechaHora;
     private double milimetros;
     private boolean anomala;
@@ -10,17 +10,17 @@ public class Medicion{
     public Medicion(){
 
     }
-    public Medicion(String idMedicion, LocalDateTime fechaHora, double milimetros, boolean anomala){
+    public Medicion(int idMedicion, LocalDateTime fechaHora, double milimetros, boolean anomala){
         this.idMedicion= idMedicion;
         this.fechaHora= fechaHora;
         this.milimetros= milimetros;
         this.anomala= anomala;
     }
     
-    public void setIdMedicion(String idMedicion){
+    public void setIdMedicion(int idMedicion){
          this.idMedicion= idMedicion;
     }
-    public String getIdMedicion(){
+    public int getIdMedicion(){
         return idMedicion;
     }
     public void setFechaHora(LocalDateTime fechaHora){
@@ -42,8 +42,12 @@ public class Medicion{
         return anomala;
     }
 
-    @Override 
-    public String toString(){
-        return "Medicion{ Id Medicion: " + idMedicion + ", Fecha y Hora: " + fechaHora + ", Milimetros: " + milimetros + ", Anomala: " + anomala + "}";
+    @Override
+    public String toString() {
+        return "MEDICIÓN\n" +
+            "ID de la medición: " + idMedicion + "\n" +
+            "Fecha y hora: " + fechaHora + "\n" +
+            "Milímetros: " + milimetros + " mm\n" +
+            "Anómala: " + (anomala ? "Sí" : "No");
     }
 }

@@ -1,5 +1,5 @@
 public abstract class Persona{
-    private String dni;
+    private int dni;
     private String nombre;
     private String apellido;
     private String correoElectronico;
@@ -9,7 +9,7 @@ public abstract class Persona{
 
     }
 
-    public Persona(String dni, String nombre, String apellido, String correo, String celular){
+    public Persona(int dni, String nombre, String apellido, String correo, String celular){
         this.dni=dni;
         this.nombre= nombre;
         this.apellido= apellido;
@@ -21,11 +21,11 @@ public abstract class Persona{
         return nombre + " " + apellido;
     }
 
-    public String getDni() {
+    public int getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
+    public void setDni(int dni) {
         this.dni = dni;
     }
 
@@ -63,7 +63,10 @@ public abstract class Persona{
 
     @Override
     public String toString() {
-        return "Persona [dni: " + dni + ", nombre: " + nombre + ", apellido: " + apellido + ", correoElectronico: " + correoElectronico + ", celular: " + celular + "]";
+        return "DNI: " + dni + "\n" +
+            "Nombre: " + getNombreCompleto() + "\n" +
+            "Correo electrónico: " + correoElectronico + "\n" +
+            "Celular: " + celular;
     }
 
     

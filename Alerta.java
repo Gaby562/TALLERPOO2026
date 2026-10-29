@@ -3,7 +3,7 @@ import enums.NivelAlerta;
 import enums.TipoEventoClimatico;
 
 public class Alerta {
-    private String idAlerta;
+    private int idAlerta;
     private LocalDateTime fechaHoraEmision;
     private NivelAlerta nivel;
     private TipoEventoClimatico evento;
@@ -15,7 +15,7 @@ public class Alerta {
     public Alerta(){
 
     }
-    public Alerta(String idAlerta, LocalDateTime fechaHoraEmision, NivelAlerta nivel, TipoEventoClimatico evento, String descripcion) {
+    public Alerta(int idAlerta, LocalDateTime fechaHoraEmision, NivelAlerta nivel, TipoEventoClimatico evento, String descripcion) {
         this.idAlerta = idAlerta;
         this.fechaHoraEmision = fechaHoraEmision;
         this.nivel = nivel;
@@ -24,10 +24,10 @@ public class Alerta {
         this.atendida = false;
         this.equipo = null;
     }
-    public String getIdAlerta() {
+    public int getIdAlerta() {
         return idAlerta;
     }
-    public void setIdAlerta(String idAlerta) {
+    public void setIdAlerta(int idAlerta) {
         this.idAlerta = idAlerta;
     }
     public LocalDateTime getFechaHoraEmision() {
@@ -74,9 +74,17 @@ public class Alerta {
     public boolean requiereEquipo() {
         return nivel == NivelAlerta.NARANJA || nivel == NivelAlerta.ROJA;
     }
+    
     @Override
     public String toString() {
-        return "Alerta [idAlerta=" + idAlerta + ", fechaHoraEmision=" + fechaHoraEmision + ", nivel=" + nivel + ", evento=" + evento + ", descripcion=" + descripcion + ", atendida=" + atendida + ", equipo=" + equipo + "]";
+        return "ALERTA\n" +
+            "ID de la alerta: " + idAlerta + "\n" +
+            "Fecha y hora de emisión: " + fechaHoraEmision + "\n" +
+            "Nivel: " + nivel + "\n" +
+            "Evento: " + evento + "\n" +
+            "Descripción: " + descripcion + "\n" +
+            "Atendida: " + (atendida ? "Sí" : "No") + "\n" +
+            "Equipo asignado: " + (equipo != null ? equipo.getNombreEquipo() : "sin asignar");
     }
     
 }
