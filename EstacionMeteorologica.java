@@ -20,6 +20,14 @@ public class EstacionMeteorologica {
     private List<Mantenimiento> mantenimientos; //la estacion puede tener ninguno o varios.Tambien aca se representa la composicion entre estacion y mantenimiento
 
     public EstacionMeteorologica() {
+        this.idEstacion = 0;
+        this.nombre = "";
+        this.latitud = 0;
+        this.longitud = 0;
+        this.altitud = 0;
+        this.estado = EstadoOperativo.OPERATIVO;
+        this.tipo = TipoEstacion.AUTOMATICA;
+        this.responsable = null;
         this.sensores = new ArrayList<>(); //lista vacia porq puede no tener ninguno
         this.mantenimientos = new ArrayList<>(); //lo mismo que sensores
     }

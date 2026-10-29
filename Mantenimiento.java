@@ -11,7 +11,12 @@ public class Mantenimiento{
     private ResponsableTecnico responsable; // 1
 
     public Mantenimiento(){
-
+        this.idMantenimiento = 0;
+        this.fecha = LocalDate.now();
+        this.tipo = TipoMantenimiento.PREVENTIVO;
+        this.descripcion = "";
+        this.sensor = null;        
+        this.responsable = null;
     }
     public Mantenimiento(int idMantenimiento, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor sensor, ResponsableTecnico responsable) {
         this.idMantenimiento = idMantenimiento;

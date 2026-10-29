@@ -3,7 +3,9 @@ public class ResponsableTecnico extends Persona{
     private String numeroLicencia;
 
     public ResponsableTecnico(){
-
+        super();
+        this.especialidad = "";
+        this.numeroLicencia = "";
     }
 
     public ResponsableTecnico (int dni, String nombre, String apellido, String correo, String celular, String especialidad, String numeroLicencia){

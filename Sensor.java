@@ -16,6 +16,12 @@ public class Sensor {
     private List<Medicion> mediciones; //cada sensor puede tener 0 o muchas mediciones. Para almacenar el historial de las mediciones
 
     public Sensor() {
+        this.idSensor = 0;
+        this.marca = "";
+        this.modelo = "";
+        this.precision = 0;
+        this.estado = EstadoOperativo.OPERATIVO;
+        this.ultimaCalibracion = LocalDate.now();
         this.mediciones = new ArrayList<>(); //lista vacia porq cada sensor puede tener cero
     }
 

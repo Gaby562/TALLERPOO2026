@@ -8,6 +8,9 @@ public class EquipoRespuesta{
     private List<ResponsableTecnico> integrantes;
 
     public EquipoRespuesta(){
+        this.idEquipo = 0;
+        this.nombreEquipo = "";
+        this.disponible = true;
         this.integrantes= new ArrayList<ResponsableTecnico>();
     }
 

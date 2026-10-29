@@ -8,8 +8,12 @@ public class Medicion{
     private boolean anomala;
 
     public Medicion(){
-
+        this.idMedicion = 0;
+        this.fechaHora = LocalDateTime.now();
+        this.milimetros = 0;
+        this.anomala = false;
     }
+    
     public Medicion(int idMedicion, LocalDateTime fechaHora, double milimetros, boolean anomala){
         this.idMedicion= idMedicion;
         this.fechaHora= fechaHora;

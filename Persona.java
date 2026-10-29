@@ -6,7 +6,11 @@ public abstract class Persona{
     private String celular;
 
     public Persona(){
-
+        this.dni = 0;
+        this.nombre = "";
+        this.apellido = "";
+        this.correoElectronico = "";
+        this.celular = "";
     }
 
     public Persona(int dni, String nombre, String apellido, String correo, String celular){

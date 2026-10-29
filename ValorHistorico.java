@@ -2,6 +2,12 @@ public class ValorHistorico {
     private int mes;
     private double acumuladoMedio;
 
+    // Constructor por defecto: arranca en enero con acumulado 0
+    public ValorHistorico() {
+        this.mes = 1;
+        this.acumuladoMedio = 0;
+    }
+
     // Valida mes y acumulado a través de los setters
     public ValorHistorico(int mes, double acumuladoMedio) {
         setMes(mes);

@@ -13,8 +13,15 @@ public class Alerta {
     private EquipoRespuesta equipo;
 
     public Alerta(){
-
+        this.idAlerta = 0;
+        this.fechaHoraEmision = LocalDateTime.now();
+        this.nivel = NivelAlerta.VERDE;
+        this.evento = TipoEventoClimatico.LLUVIA_COPIOSA;
+        this.descripcion = "";
+        this.atendida = false;
+        this.equipo = null;
     }
+    
     public Alerta(int idAlerta, LocalDateTime fechaHoraEmision, NivelAlerta nivel, TipoEventoClimatico evento, String descripcion) {
         this.idAlerta = idAlerta;
         this.fechaHoraEmision = fechaHoraEmision;

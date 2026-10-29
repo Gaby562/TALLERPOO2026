@@ -24,6 +24,13 @@ public class ZonaGeografica {
 
     //constructor por defecto
     public ZonaGeografica() {
+        this.idZona = 0;
+        this.nombre = "";
+        this.nivelVulnerabilidad = NivelVulnerabilidad.BAJO;
+        // Umbrales por defecto que cumplen amarilla < naranja < roja
+        this.umbralAmarilla = 50;
+        this.umbralNaranja = 100;
+        this.umbralRoja = 150;
         this.nivelAlertaActual = NivelAlerta.VERDE;
         this.estaciones = new ArrayList<>();
         this.valoresHistoricos = new ArrayList<>();
