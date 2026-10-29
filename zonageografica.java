@@ -19,6 +19,9 @@ public class ZonaGeografica {
     private List<ValorHistorico> valoresHistoricos;   // composición
     private List<Alerta> alertas;                     // asociación "emite", 0..*
 
+    // Contador compartido por todas las zonas: cada alerta recibe un id único
+    private static int proximoIdAlerta = 1;
+
     //constructor por defecto
     public ZonaGeografica() {
         this.nivelAlertaActual = NivelAlerta.VERDE;
@@ -189,7 +192,8 @@ public class ZonaGeografica {
     // Emite una alerta con nivel y descripción indicados por un operador
     // (casos CRECIDA_RIO y TORMENTA_SEVERA)
     public Alerta emitirAlerta(TipoEventoClimatico ev, NivelAlerta nivel, String descripcion) {
-        int id = alertas.size() + 1;
+        // El id es un número único: se usa el contador y después se incrementa
+        int id = proximoIdAlerta++;
         Alerta a = new Alerta(id, LocalDateTime.now(), nivel, ev, descripcion);
         alertas.add(a);
         return a;

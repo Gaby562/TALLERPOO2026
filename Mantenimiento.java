@@ -7,8 +7,8 @@ public class Mantenimiento{
     private TipoMantenimiento tipo;
     private String descripcion;
     // relaciones
-    private Sensor sensor;
-    private ResponsableTecnico responsable;
+    private Sensor sensor;  // 0..1
+    private ResponsableTecnico responsable; // 1
 
     public Mantenimiento(){
 

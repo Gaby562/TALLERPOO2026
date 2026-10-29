@@ -17,6 +17,7 @@ public abstract class Persona{
         this.celular=celular;
     }
 
+    // Devuelve nombre y apellido juntos (no es un atributo, se arma al pedirlo)
     public String getNombreCompleto(){
         return nombre + " " + apellido;
     }
