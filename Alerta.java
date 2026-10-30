@@ -74,10 +74,13 @@ public class Alerta {
         this.equipo = equipo;
     }
     
+    // Asigna el equipo y marca la alerta como atendida
     public void asignarEquipo(EquipoRespuesta e) {
         this.equipo = e;
         this.atendida = true;
     }
+
+    // Solo las alertas NARANJA y ROJA requieren equipo
     public boolean requiereEquipo() {
         return nivel == NivelAlerta.NARANJA || nivel == NivelAlerta.ROJA;
     }
