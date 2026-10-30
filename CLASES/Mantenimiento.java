@@ -1,4 +1,6 @@
+package CLASES;
 import java.time.LocalDate;
+
 import enums.TipoMantenimiento; 
 
 public class Mantenimiento{

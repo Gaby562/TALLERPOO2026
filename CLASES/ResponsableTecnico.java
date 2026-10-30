@@ -1,3 +1,4 @@
+package CLASES;
 public class ResponsableTecnico extends Persona{
     private String especialidad;
     private String numeroLicencia;

@@ -1,3 +1,4 @@
+package CLASES;
 import enums.NivelAlerta;
 import enums.NivelVulnerabilidad;
 import enums.TipoEventoClimatico;

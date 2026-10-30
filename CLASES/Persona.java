@@ -1,3 +1,4 @@
+package CLASES;
 public abstract class Persona{
     private int dni;
     private String nombre;

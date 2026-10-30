@@ -1,3 +1,4 @@
+package CLASES;
 public class ValorHistorico {
     private int mes;
     private double acumuladoMedio;
