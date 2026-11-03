@@ -34,6 +34,7 @@ public class ZonaGeografica {
         this.nivelAlertaActual = NivelAlerta.VERDE;
         this.estaciones = new ArrayList<>();
         this.valoresHistoricos = new ArrayList<>();
+        this.alertas = new ArrayList<>();
     }
 
     public ZonaGeografica(int idZona, String nombre, NivelVulnerabilidad nivelVulnerabilidad, double umbralAmarilla, double umbralNaranja, double umbralRoja) {
@@ -85,7 +86,7 @@ public class ZonaGeografica {
     }
 
     // Cambia los tres umbrales a la vez, validando el orden
-    public void setUmbrales(double amarilla, double naranja, double roja) {
+    public void setUmbrales(double amarilla, double naranja, double roja) throws IllegalArgumentException{
         if (!(amarilla < naranja && naranja < roja)) {
             throw new IllegalArgumentException(
                 "Los umbrales deben cumplir: amarilla < naranja < roja.");

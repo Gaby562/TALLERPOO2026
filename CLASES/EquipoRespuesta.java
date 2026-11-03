@@ -22,7 +22,7 @@ public class EquipoRespuesta{
         this.integrantes= new ArrayList<ResponsableTecnico>();
     }
 
-    public void agregarResponsableTecnico(ResponsableTecnico r){
+    public void agregarIntegrante(ResponsableTecnico r){
         this.integrantes.add(r);
     }
 
