@@ -1,10 +1,11 @@
 package CLASES;
-import enums.NivelAlerta;
-import enums.NivelVulnerabilidad;
-import enums.TipoEventoClimatico;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import enums.NivelAlerta;
+import enums.NivelVulnerabilidad;
+import enums.TipoEventoClimatico;
 
 public class ZonaGeografica {
     private int idZona;
@@ -29,26 +30,18 @@ public class ZonaGeografica {
         this.nombre = "";
         this.nivelVulnerabilidad = NivelVulnerabilidad.BAJO;
         // Umbrales por defecto que cumplen amarilla < naranja < roja
-        this.umbralAmarilla = 50;
-        this.umbralNaranja = 100;
-        this.umbralRoja = 150;
+        setUmbrales(50, 100, 150);
         this.nivelAlertaActual = NivelAlerta.VERDE;
         this.estaciones = new ArrayList<>();
         this.valoresHistoricos = new ArrayList<>();
-        this.alertas = new ArrayList<>();
     }
 
-    public ZonaGeografica(int idZona, String nombre, NivelVulnerabilidad nivelVulnerabilidad, double umbralAmarilla, double umbralNaranja, double umbralRoja){
-        // Se valida antes de guardar: amarilla < naranja < roja
-        if (!(umbralAmarilla < umbralNaranja && umbralNaranja < umbralRoja)) {
-            throw new IllegalArgumentException("Los umbrales deben cumplir: amarilla < naranja < roja.");
-        }
+    public ZonaGeografica(int idZona, String nombre, NivelVulnerabilidad nivelVulnerabilidad, double umbralAmarilla, double umbralNaranja, double umbralRoja) {
         this.idZona = idZona;
         this.nombre = nombre;
         this.nivelVulnerabilidad = nivelVulnerabilidad;
-        this.umbralAmarilla = umbralAmarilla;
-        this.umbralNaranja = umbralNaranja;
-        this.umbralRoja = umbralRoja;
+        // La validación (amarilla < naranja < roja) la hace setUmbrales
+        setUmbrales(umbralAmarilla, umbralNaranja, umbralRoja);
         this.nivelAlertaActual = NivelAlerta.VERDE;
         this.estaciones = new ArrayList<>();
         this.valoresHistoricos = new ArrayList<>();

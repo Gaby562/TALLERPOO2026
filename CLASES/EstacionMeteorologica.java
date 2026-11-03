@@ -1,10 +1,11 @@
 package CLASES;
-import enums.EstadoOperativo;
-import enums.TipoEstacion;
-import enums.TipoMantenimiento;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import enums.EstadoOperativo;
+import enums.TipoEstacion;
+import enums.TipoMantenimiento;
 
 public class EstacionMeteorologica {
     private int idEstacion;

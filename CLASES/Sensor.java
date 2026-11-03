@@ -1,10 +1,10 @@
 package CLASES;
-import enums.EstadoOperativo;
 import java.time.LocalDate; //una fecha sin hora para la ultima calibracion
 import java.time.LocalDateTime; //fecha y hora para registrar la medicion
 import java.util.List;
 
 import EXCEPCIONES.LecturaInvalidaException;
+import enums.EstadoOperativo;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,9 @@ public class Sensor {
 
     //relacion con medicion
     private List<Medicion> mediciones; //cada sensor puede tener 0 o muchas mediciones. Para almacenar el historial de las mediciones
+
+    // Contador compartido por todos los sensores: cada medición recibe un id único
+    private static int proximoIdMedicion = 1;
 
     public Sensor() {
         this.idSensor = 0;
@@ -122,8 +125,9 @@ public class Sensor {
                 anomala = true; //y si es anomala la registramos sin descartarla
             }
         }
-        // El id incluye el sensor para que no se repita entre sensores distintos
-        int id = mediciones.size() + 1;
+        
+        // El id es un número único: se usa el contador y después se incrementa
+        int id = proximoIdMedicion++;
         Medicion nueva = new Medicion(id, fh, mm, anomala);
         mediciones.add(nueva); //guardamos la medicion a la lista del historial
         return nueva; //y devolvemos la medicion que se creo

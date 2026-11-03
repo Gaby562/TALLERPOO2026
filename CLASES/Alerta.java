@@ -1,5 +1,6 @@
 package CLASES;
 import java.time.LocalDateTime;
+
 import enums.NivelAlerta;
 import enums.TipoEventoClimatico;
 
