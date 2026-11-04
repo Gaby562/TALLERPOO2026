@@ -1,8 +1,11 @@
 package SISTEMA;
 
+import CLASES.Alerta;
 import CLASES.EstacionMeteorologica;
 import CLASES.Medicion;
 import CLASES.Sensor;
+import CLASES.ZonaGeografica;
+import enums.NivelAlerta;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +52,48 @@ public class Reportes {
         Collections.sort(ranking, new OrdenarPorAcumuladoDesc());
         // Devolvemos el ranking ordenado.
         return ranking;
+    }
+
+    // Busca alertas según el nivel, las fechas y la zona.
+    // Si nivel o zona son null, no se aplica ese filtro.
+    public List<Alerta> historialAlertas(NivelAlerta nivel, LocalDate desde, LocalDate hasta, ZonaGeografica zona) {
+
+        // Creamos una lista vacía para guardar las alertas encontradas.
+        List<Alerta> resultado = new ArrayList<>();
+
+        // Recorremos todas las zonas del sistema.
+        for (ZonaGeografica z : sistema.getZonas()) {
+
+            // Si se eligió una zona y no coincide, la salteamos.
+            if (zona != null && z != zona) {
+                continue;
+            }
+
+            // Recorremos las alertas de cada zona.
+            for (Alerta a : z.getAlertas()) {
+
+                // Obtenemos la fecha en la que se emitió la alerta.
+                LocalDate dia = a.getFechaHoraEmision().toLocalDate();
+
+                // Verificamos si el nivel coincide con el solicitado.
+                // Si nivel es null, acepta cualquier nivel.
+                boolean cumpleNivel = (nivel == null || a.getNivel() == nivel);
+
+                // Verificamos si la fecha está dentro del rango indicado.
+                boolean cumpleFecha = !dia.isBefore(desde) && !dia.isAfter(hasta);
+
+                // Si cumple con los dos filtros, agregamos la alerta.
+                if (cumpleNivel && cumpleFecha) {
+                    resultado.add(a);
+                }
+            }
+        }
+
+        // Ordenamos las alertas desde la más reciente a la más antigua.
+        Collections.sort(resultado, new OrdenarAlertasPorFechaDesc());
+
+        // Devolvemos la lista de alertas encontradas y ordenadas.
+        return resultado;
     }
 }
 
