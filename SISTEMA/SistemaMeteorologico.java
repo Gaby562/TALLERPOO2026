@@ -215,10 +215,9 @@ public class SistemaMeteorologico {
 
     // Alertas cargadas por un operador: solo CRECIDA_RIO y TORMENTA_SEVERA
     public Alerta registrarAlertaOperador(ZonaGeografica z, TipoEventoClimatico ev, NivelAlerta nivel, String descripcion) {
-        // La consigna dice que LLUVIA_COPIOSA la genera el sistema, no el operador
-        if (ev == TipoEventoClimatico.LLUVIA_COPIOSA) {
-            // Se rechaza el uso incorrecto del método con una excepción
-            throw new IllegalArgumentException("LLUVIA_COPIOSA la genera el sistema, no un operador.");
+        // Solo se permite registrar CRECIDA_RIO o TORMENTA_SEVERA
+        if (ev != TipoEventoClimatico.CRECIDA_RIO && ev != TipoEventoClimatico.TORMENTA_SEVERA) {
+            throw new IllegalArgumentException("El operador solo puede registrar CRECIDA_RIO o TORMENTA_SEVERA.");
         }
 
         // La zona crea la alerta con el nivel y la descripción que indicó el operador,
