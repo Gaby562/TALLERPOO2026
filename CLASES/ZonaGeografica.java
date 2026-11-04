@@ -142,62 +142,110 @@ public class ZonaGeografica {
         valoresHistoricos.add(v);
     }
 
-    // Suma los mm de las últimas 24 h de todos los sensores de todas las estaciones de la zona    
+    // Suma los milímetros de lluvia registrados en las últimas 24 horas
     public double lluviaAcumulada24h() {
+
+        // Obtiene la fecha y hora actual
         LocalDateTime ahora = LocalDateTime.now();
+
+        // Calcula la fecha y hora de hace 24 horas
         LocalDateTime desde = ahora.minusHours(24);
+
+        // Variable que acumula los milímetros de lluvia
         double total = 0;
+
+        // Recorre todas las estaciones que pertenecen a la zona
         for (EstacionMeteorologica e : estaciones) {
+
+            // Recorre todos los sensores instalados en cada estación
             for (Sensor s : e.getSensores()) {
+
+                // Recorre todas las mediciones registradas por cada sensor
                 for (Medicion m : s.getMediciones()) {
+
+                    // Comprueba si la medición está dentro de las últimas 24 horas
                     if (!m.getFechaHora().isBefore(desde)
                             && !m.getFechaHora().isAfter(ahora)) {
+
+                        // Si está dentro del período, suma sus milímetros al total
                         total += m.getMilimetros();
                     }
                 }
             }
         }
+
+        // Devuelve el total de milímetros acumulados en las últimas 24 horas
         return total;
     }
 
-    // Compara la lluvia acumulada con los umbrales y actualiza el nivel vigente
-    // Si el nivel cambió y no es VERDE, emite una alerta de LLUVIA_COPIOSA
+    // Compara la lluvia acumulada con los umbrales y actualiza el nivel de alerta
     public NivelAlerta evaluarRiesgo() {
+
+        // Obtiene los milímetros acumulados durante las últimas 24 horas
         double lluvia = lluviaAcumulada24h();
+
+        // Variable donde se guarda el nuevo nivel de alerta
         NivelAlerta nuevo;
 
+        // Si la lluvia alcanza o supera el umbral rojo, el nivel será ROJO
         if (lluvia >= umbralRoja) {
             nuevo = NivelAlerta.ROJA;
+
+        // Si no llegó al rojo, pero alcanza el umbral naranja, será NARANJA
         } else if (lluvia >= umbralNaranja) {
             nuevo = NivelAlerta.NARANJA;
+
+        // Si no llegó al naranja, pero alcanza el umbral amarillo, será AMARILLO
         } else if (lluvia >= umbralAmarilla) {
             nuevo = NivelAlerta.AMARILLA;
+
+        // Si no alcanza ninguno de los umbrales, el nivel será VERDE
         } else {
             nuevo = NivelAlerta.VERDE;
         }
 
+        // Comprueba si el nuevo nivel es diferente al nivel de alerta anterior
         boolean cambio = nuevo != nivelAlertaActual;
+
+        // Actualiza el nivel de alerta actual de la zona
         nivelAlertaActual = nuevo;
 
-        // Solo se emite cuando el nivel cambia, para no repetir alertas
+        // Si cambió el nivel y no es VERDE, genera una alerta automática
         if (cambio && nuevo != NivelAlerta.VERDE) {
+
+            // Emite una alerta de tipo LLUVIA_COPIOSA
             emitirAlerta(TipoEventoClimatico.LLUVIA_COPIOSA);
         }
+
+        // Devuelve el nivel de alerta actual de la zona
         return nivelAlertaActual;
     }
 
-    // Emite una alerta con el nivel vigente de la zona (caso LLUVIA_COPIOSA, automática)
+    // Emite una alerta utilizando el nivel actual de la zona
     public Alerta emitirAlerta(TipoEventoClimatico ev) {
-        return emitirAlerta(ev, nivelAlertaActual, "Lluvia acumulada en 24 h: " + lluviaAcumulada24h() + " mm");
+
+        // Llama al otro método emitirAlerta enviándole:
+        // el tipo de evento, el nivel actual y una descripción de la lluvia acumulada
+        return emitirAlerta(
+            ev,
+            nivelAlertaActual,
+            "Lluvia acumulada en 24 h: " + lluviaAcumulada24h() + " mm"
+        );
     }
 
-    // Emite una alerta con nivel y descripción indicados por un operador
-    // (casos CRECIDA_RIO y TORMENTA_SEVERA)
+    // Emite una alerta con el nivel y la descripción indicados
     public Alerta emitirAlerta(TipoEventoClimatico ev, NivelAlerta nivel, String descripcion) {
-        // El id es un número único: se usa el contador y después se incrementa
+
+        // Obtiene el próximo identificador disponible y después incrementa el contador
         int id = proximoIdAlerta++;
+
+        // Crea una nueva alerta con su ID, fecha y hora, nivel, evento y descripción
         Alerta a = new Alerta(id, LocalDateTime.now(), nivel, ev, descripcion);
+
+        // Agrega la alerta creada a la lista de alertas de la zona
         alertas.add(a);
+
+        // Devuelve la alerta creada
         return a;
     }
 

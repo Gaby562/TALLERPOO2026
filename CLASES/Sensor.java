@@ -141,10 +141,13 @@ public class Sensor {
     //metodo que dice si el sensor necesita una calibracion y devuelve el resultado de la comparacion con la ult calibracion
     //plusMonths le suma 12 meses a la ult calibracion y isBefore comprueba si la fecha de vencimiento quedo antes de la fecha actual
     public boolean requiereCalibracion() {
-        if (ultimaCalibracion == null) { //comprueba si no hay una fecha de calibración cargada, si la hay, devuelve false
-            return false;
+
+        // Si no tiene fecha de calibración, necesita calibrarse
+        if (ultimaCalibracion == null) {
+            return true;
         }
 
+        // Comprueba si pasaron más de 12 meses desde la última calibración
         return ultimaCalibracion.plusMonths(12).isBefore(LocalDate.now());
     }
 
