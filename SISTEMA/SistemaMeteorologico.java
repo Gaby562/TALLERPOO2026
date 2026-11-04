@@ -1,16 +1,8 @@
 package SISTEMA;
-import java.time.LocalDateTime;
-
-import enums.NivelAlerta;
-import enums.TipoEventoClimatico;
-
-
-import java.util.ArrayList;
-import java.util.List;
-
 import CLASES.Alerta;
 import CLASES.EquipoRespuesta;
 import CLASES.EstacionMeteorologica;
+import CLASES.Mantenimiento;
 import CLASES.Medicion;
 import CLASES.ResponsableTecnico;
 import CLASES.Sensor;
@@ -21,6 +13,13 @@ import EXCEPCIONES.LecturaInvalidaException;
 import EXCEPCIONES.SensorSinEstacionException;
 import EXCEPCIONES.SensorYaInstaladoException;
 import EXCEPCIONES.TecnicoYaAsignadoException;
+import enums.NivelAlerta;
+import enums.TipoEventoClimatico;
+import enums.TipoMantenimiento;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SistemaMeteorologico {
     private List<ZonaGeografica> zonas;
@@ -160,6 +159,47 @@ public class SistemaMeteorologico {
 
         // Si no está en ninguna estación, lo instala
         destino.instalarSensor(s);
+    }
+
+    // Para trasladar un sensor: primero se lo retira de su estación actual
+    public void retirarSensor(Sensor s) throws SensorSinEstacionException {
+
+        // Busca en qué estación meteorológica está instalado el sensor y guarda esa estación en la variable "actual".
+        EstacionMeteorologica actual = buscarEstacionDeSensor(s);
+
+        // Comprueba si el sensor no se encuentra instalado en ninguna estación.
+        if (actual == null) {
+            // Si no está instalado, lanza una excepción.
+            throw new SensorSinEstacionException("El sensor " + s.getIdSensor() + " no está instalado en ninguna estación.");
+        }
+        // Si encuentra la estación, retira el sensor de ella.
+        actual.retirarSensor(s);
+    }
+
+    // Registra el mantenimiento en la estación; si es calibración, actualiza la fecha del sensor
+    public Mantenimiento registrarMantenimiento(EstacionMeteorologica est, int id, LocalDate fecha,
+            TipoMantenimiento tipo, String descripcion, Sensor s, ResponsableTecnico r) {
+
+        // Si hay un sensor y no pertenece a esa estación...
+        if (s != null && !est.getSensores().contains(s)) {
+
+            // Lanza un error indicando que el sensor no pertenece a la estación.
+            throw new IllegalArgumentException(
+                "El sensor " + s.getIdSensor() + " no pertenece a la estación " + est.getNombre() + ".");
+        }
+
+        // Registra el mantenimiento en la estación y guarda el resultado en m.
+        Mantenimiento m = est.registrarMantenimiento(id, fecha, tipo, descripcion, s, r);
+
+        // Comprueba si el tipo de mantenimiento es calibración y el sensor existe.
+        if (tipo == TipoMantenimiento.CALIBRACION && s != null) {
+
+            // Actualiza la fecha de la última calibración del sensor.
+            s.setUltimaCalibracion(fecha);
+        }
+
+        // Devuelve el mantenimiento registrado.
+        return m;
     }
 
     // Un técnico puede integrar a lo sumo un equipo
