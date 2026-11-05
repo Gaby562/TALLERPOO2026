@@ -6,10 +6,11 @@ import CLASES.Medicion;
 import CLASES.Sensor;
 import CLASES.ValorHistorico;
 import CLASES.ZonaGeografica;
+import enums.EstadoOperativo;
 import enums.NivelAlerta;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.DayOfWeek;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -315,6 +316,126 @@ public class Reportes {
         // Devolvemos el informe.
         return texto;
     }
+
+
+    //INFORME DE FALLAS Y MANTENIMIENTO 
+
+    
+    // Genera un informe con las fallas y necesidades de mantenimiento de los sensores
+    public String informeFallas() {
+
+        // Guarda el título del informe
+        String texto = "INFORME DE FALLAS Y MANTENIMIENTO\n";
+
+        // Agrega el título de la primera sección
+        texto += "\n1. Sensores fuera de servicio o en mantenimiento\n";
+
+        // Contador de sensores encontrados
+        int cantidad = 0;
+
+        // Recorre todos los sensores del sistema
+        for (Sensor s : sistema.getSensores()) {
+
+            // Comprueba si el sensor no está operativo
+            if (s.getEstado() != EstadoOperativo.OPERATIVO) {
+
+                // Agrega al informe el ID, el estado y la ubicación del sensor
+                texto += "- Sensor " + s.getIdSensor() + " (" + s.getEstado() + "), "
+                    + ubicacion(s) + "\n";
+
+                // Aumenta el contador
+                cantidad++;
+            }
+        }
+
+        // Si no encontró sensores, indica que no hay ninguno
+        if (cantidad == 0) {
+            texto += "Ninguno\n";
+        }
+
+        // Agrega el título de la segunda sección
+        texto += "\n2. Lecturas anómalas\n";
+
+        // Reinicia el contador
+        cantidad = 0;
+
+        // Recorre todos los sensores del sistema
+        for (Sensor s : sistema.getSensores()) {
+
+            // Recorre las mediciones del sensor actual
+            for (Medicion m : s.getMediciones()) {
+
+                // Comprueba si la medición está marcada como anómala
+                if (m.getAnomala()) {
+
+                    // Agrega al informe los datos de la medición
+                    texto += "- Sensor " + s.getIdSensor() + ", medición " + m.getIdMedicion()
+                        + ", " + m.getFechaHora() + ", " + m.getMilimetros() + " mm\n";
+
+                    // Aumenta el contador
+                    cantidad++;
+                }
+            }
+        }
+
+        // Si no encontró mediciones anómalas, indica que no hay ninguna
+        if (cantidad == 0) {
+            texto += "Ninguna\n";
+        }
+
+        // Agrega el título de la tercera sección
+        texto += "\n3. Sensores que requieren calibración\n";
+
+        // Reinicia el contador
+        cantidad = 0;
+
+        // Recorre todos los sensores del sistema
+        for (Sensor s : sistema.getSensores()) {
+
+            // Comprueba si el sensor necesita calibración
+            if (s.requiereCalibracion()) {
+
+                // Obtiene la última fecha de calibración o indica si nunca fue calibrado
+                String ultima = (s.getUltimaCalibracion() != null)
+                    ? s.getUltimaCalibracion().toString() : "nunca calibrado";
+
+                // Agrega al informe el ID, la fecha de calibración y la ubicación
+                texto += "- Sensor " + s.getIdSensor() + ", última calibración: " + ultima
+                    + ", " + ubicacion(s) + "\n";
+
+                // Aumenta el contador
+                cantidad++;
+            }
+        }
+
+        // Si no encontró sensores que necesiten calibración, indica que no hay ninguno
+        if (cantidad == 0) {
+            texto += "Ninguno\n";
+        }
+
+        // Devuelve el informe completo
+        return texto;
+    }
+
+    // Busca en qué estación está instalado un sensor
+    private String ubicacion(Sensor s) {
+
+        // Busca la estación a la que pertenece el sensor
+        EstacionMeteorologica e = sistema.buscarEstacionDeSensor(s);
+
+        // Comprueba si encontró una estación
+        if (e != null) {
+
+            // Devuelve el nombre y el ID de la estación
+            return "estación " + e.getNombre() + " (ID " + e.getIdEstacion() + ")";
+        }
+
+        // Si no encontró una estación, indica que no está asignado
+        return "sin estación asignada";
+    }
+
+
+    //FICHA TECNICA DE UNA ESTACION
 
 
 }
