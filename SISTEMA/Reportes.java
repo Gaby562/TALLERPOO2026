@@ -9,9 +9,15 @@ import CLASES.ZonaGeografica;
 import enums.NivelAlerta;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.DayOfWeek;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 
 public class Reportes {
     private SistemaMeteorologico sistema;
@@ -197,7 +203,118 @@ public class Reportes {
 
     //HISTORICO DE PRECIPITACIONES(DIARIO, SEMANAL Y MENSUAL)
 
-    
+    // Recibe una lista de estaciones y dos fechas.
+    private Map<LocalDate, Double> acumularPorDia(List<EstacionMeteorologica> lista, LocalDate desde, LocalDate hasta) {
 
+        // Creamos un mapa que guarda fecha y milímetros.
+        Map<LocalDate, Double> porDia = new TreeMap<>();
+
+        // Recorremos las estaciones.
+        for (EstacionMeteorologica e : lista) {
+
+            // Recorremos los sensores de cada estación.
+            for (Sensor s : e.getSensores()) {
+
+                // Recorremos las mediciones de cada sensor.
+                for (Medicion m : s.getMediciones()) {
+
+                    // Obtenemos la fecha de la medición.
+                    LocalDate dia = m.getFechaHora().toLocalDate();
+
+                    // Verificamos que esté dentro del rango de fechas.
+                    if (!dia.isBefore(desde) && !dia.isAfter(hasta)) {
+                        // Sumamos los milímetros de ese día.
+                        porDia.put(dia, porDia.getOrDefault(dia, 0.0) + m.getMilimetros());
+                    }
+                }
+            }
+        }
+        // Devolvemos las precipitaciones agrupadas por día.
+        return porDia;
+    }
+
+    // Recibe una estación y dos fechas.
+    public Map<LocalDate, Double> historicoDiario(EstacionMeteorologica e, LocalDate desde, LocalDate hasta) {
+        // Creamos una lista.
+        List<EstacionMeteorologica> unaSola = new ArrayList<>();
+        // Agregamos la estación a la lista.
+        unaSola.add(e);
+        // Calculamos los milímetros por día de esa estación.
+        return acumularPorDia(unaSola, desde, hasta);
+    }
+
+    // Recibe una zona y dos fechas.
+    public Map<LocalDate, Double> historicoDiario(ZonaGeografica z, LocalDate desde, LocalDate hasta) {
+        // Calculamos los milímetros por día de todas las estaciones que pertenecen a esa zona.
+        return acumularPorDia(z.getEstaciones(), desde, hasta);
+    }
+
+    // Recibe las precipitaciones diarias.
+    public Map<LocalDate, Double> acumuladoSemanal(Map<LocalDate, Double> diario) {
+        // Creamos un mapa para guardar los acumulados semanales.
+        Map<LocalDate, Double> semanal = new TreeMap<>();
+        // Recorremos los días.
+        for (Map.Entry<LocalDate, Double> dia : diario.entrySet()) {
+            // Buscamos el lunes de esa semana.
+            LocalDate lunes = dia.getKey().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            // Sumamos los milímetros de cada día a su semana.
+            semanal.put(lunes, semanal.getOrDefault(lunes, 0.0) + dia.getValue());
+        }
+        // Devolvemos los acumulados semanales.
+        return semanal;
+    }
+
+    // Recibe las precipitaciones diarias.
+    public Map<YearMonth, Double> acumuladoMensual(Map<LocalDate, Double> diario) {
+        // Creamos un mapa para guardar los acumulados mensuales.
+        Map<YearMonth, Double> mensual = new TreeMap<>();
+        // Recorremos los días.
+        for (Map.Entry<LocalDate, Double> dia : diario.entrySet()) {
+            // Obtenemos el mes de esa fecha.
+            YearMonth mes = YearMonth.from(dia.getKey());
+            // Sumamos los milímetros al mes correspondiente.
+            mensual.put(mes, mensual.getOrDefault(mes, 0.0) + dia.getValue());
+        }
+        // Devolvemos los acumulados mensuales.
+        return mensual;
+    }
+    
+    // Recibe una zona y dos fechas.
+    public String compararConHistorico(ZonaGeografica z, LocalDate desde, LocalDate hasta) {
+        // Obtenemos las precipitaciones diarias de la zona y después las agrupamos por mes.
+        Map<YearMonth, Double> mensual = acumuladoMensual(historicoDiario(z, desde, hasta));
+
+        // Creamos el texto del informe.
+        String texto = "COMPARACIÓN MENSUAL CON LA MEDIA HISTÓRICA\nZona: " + z.getNombre() + "\n";
+        
+        // Recorremos cada mes.
+        for (Map.Entry<YearMonth, Double> mes : mensual.entrySet()) {
+            // Obtenemos los milímetros acumulados.
+            double acumulado = mes.getValue();
+            // Buscamos el valor histórico de ese mes.
+            ValorHistorico historico = buscarValorHistorico(z, mes.getKey().getMonthValue());
+            // Mostramos el mes y los milímetros acumulados.
+            texto += mes.getKey() + ": " + acumulado + " mm";
+            // Si no hay datos históricos, avisamos.
+            if (historico == null) {
+                texto += " (sin valor histórico cargado)\n";
+
+            } else {
+                // Mostramos el promedio histórico.
+                texto += "histórico: " + historico.getAcumuladoMedio() + " mm";
+                // Verificamos que no sea cero.
+                if (historico.getAcumuladoMedio() != 0) {
+                    // Calculamos cuánto se desvió del histórico en porcentaje.
+                    double desvio = (acumulado - historico.getAcumuladoMedio()) / historico.getAcumuladoMedio() * 100;
+                    // Mostramos la desviación con un decimal.
+                    texto += "desviación: " + String.format("%.1f", desvio) + " %";
+                }
+                // Pasamos a la siguiente línea.
+                texto += "\n";
+            }
+        }
+        // Devolvemos el informe.
+        return texto;
+    }
 }
 
