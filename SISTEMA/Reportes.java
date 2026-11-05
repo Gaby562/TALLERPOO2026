@@ -20,6 +20,8 @@ public class Reportes {
         this.sistema = sistema;
     }
 
+    //RANKING DE ESTACIONES POR VOLUMETRIA
+
     // Calcula los milímetros acumulados de una estación, entre dos fechas.
     public double acumuladoEstacion(EstacionMeteorologica e, LocalDate desde, LocalDate hasta) {
         // Variable donde sumamos los milímetros.
@@ -55,6 +57,8 @@ public class Reportes {
         // Devolvemos el ranking ordenado.
         return ranking;
     }
+
+    //HISTORIAL DE ALERTAS EMITIDAS
 
     // Busca alertas según el nivel, las fechas y la zona.
     // Si nivel o zona son null, no se aplica ese filtro.
