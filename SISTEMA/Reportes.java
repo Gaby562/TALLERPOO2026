@@ -10,7 +10,6 @@ import enums.NivelAlerta;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.DayOfWeek;
-import java.time.YearMonth;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -286,7 +285,7 @@ public class Reportes {
 
         // Creamos el texto del informe.
         String texto = "COMPARACIÓN MENSUAL CON LA MEDIA HISTÓRICA\nZona: " + z.getNombre() + "\n";
-        
+
         // Recorremos cada mes.
         for (Map.Entry<YearMonth, Double> mes : mensual.entrySet()) {
             // Obtenemos los milímetros acumulados.
@@ -316,5 +315,7 @@ public class Reportes {
         // Devolvemos el informe.
         return texto;
     }
+
+
 }
 
