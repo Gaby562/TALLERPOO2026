@@ -2,10 +2,7 @@ package CLASES;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import enums.NivelAlerta;
-import enums.NivelVulnerabilidad;
-import enums.TipoEventoClimatico;
+import enums.*;
 
 public class ZonaGeografica {
     private int idZona;

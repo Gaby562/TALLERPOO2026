@@ -2,10 +2,8 @@ package CLASES;
 import java.time.LocalDate; //una fecha sin hora para la ultima calibracion
 import java.time.LocalDateTime; //fecha y hora para registrar la medicion
 import java.util.List;
-
-import EXCEPCIONES.LecturaInvalidaException;
-import enums.EstadoOperativo;
-
+import EXCEPCIONES.*;
+import enums.*;
 import java.util.ArrayList;
 
 public class Sensor {

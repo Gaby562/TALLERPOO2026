@@ -1,6 +1,6 @@
 package SISTEMA;
 
-import CLASES.Alerta;
+import CLASES.*;
 import java.util.Comparator;
 
 // Ordena las alertas de la más reciente a la más antigua

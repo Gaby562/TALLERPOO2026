@@ -1,7 +1,5 @@
 package CLASES;
-import enums.EstadoOperativo;
-import enums.TipoEstacion;
-import enums.TipoMantenimiento;
+import enums.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,6 @@
 package SISTEMA;
-import CLASES.EstacionMeteorologica;
+import CLASES.*;
+
 // Une una estación con su acumulado de lluvia en un rango de fechas
 public class PuestoRanking {
     private EstacionMeteorologica estacion;
