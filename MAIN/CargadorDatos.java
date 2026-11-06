@@ -13,8 +13,8 @@ public class CargadorDatos {
     public static void cargar(SistemaMeteorologico sistema) {
         try {
             //Tecnicos
-            ResponsableTecnico t1 = new ResponsableTecnico(30111222, "Pablo", "Yañez", "pablo.yañez@mail.com", "47520908", "Hidrología", "HG-101");
-            ResponsableTecnico t2 = new ResponsableTecnico(28333444, "Gabriela", "Mascimiani", "gabriela.mascimiani@mail.com", "46251338", "Meteorología", "MT-202");
+            ResponsableTecnico t1 = new ResponsableTecnico(47520908, "Pablo", "Yañez", "pablo.yanez@mail.com", "3456346564", "Hidrología", "HG-101");
+            ResponsableTecnico t2 = new ResponsableTecnico(46251338, "Gabriela", "Mascimiani", "gabriela.mascimiani@mail.com", "3456497258", "Meteorología", "MT-202");
             ResponsableTecnico t3 = new ResponsableTecnico(33555666, "Melissa", "Fernandez", "melissa.fernandez@mail.com", "3454555666", "Instrumental", "IN-303");
             ResponsableTecnico t4 = new ResponsableTecnico(31777888, "Pedro", "Benitez", "pedro.benitez@mail.com", "3454777888", "Telemetría", "TL-404");
             sistema.agregarTecnico(t1);

@@ -31,11 +31,6 @@ public class Menu {
         return scanner.nextLine().trim();
     }
 
-    // Espera un Enter para que el usuario alcance a leer el resultado antes de volver al menú
-    private void pausar() {
-        System.out.print("\nPresioná Enter para continuar...");
-        scanner.nextLine();
-    }
  
     // Repite la pregunta hasta que el usuario escriba un entero válido
     private int leerEntero(String mensaje) {
@@ -177,7 +172,7 @@ public class Menu {
             switch (opcion) {
                 case 1: menuInfraestructura(); break;
                 case 2: menuPersonal(); break;
-                case 3: registrarLectura(); pausar(); break;
+                case 3: registrarLectura(); break;
                 case 4: menuAlertas(); break;
                 case 5: menuReportes(); break;
                 case 0: System.out.println("Hasta luego."); break;
