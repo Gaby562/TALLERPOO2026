@@ -115,6 +115,14 @@ public class SistemaMeteorologico {
         if (e.getIdEstacion() <= 0) {
             throw new IllegalArgumentException("El id de la estación debe ser mayor que 0.");
         }
+        // La latitud tiene que estar entre -90 y 90 grados
+        if (e.getLatitud() < -90 || e.getLatitud() > 90) {
+            throw new IllegalArgumentException("La latitud debe estar entre -90 y 90.");
+        }
+        // La longitud tiene que estar entre -180 y 180 grados
+        if (e.getLongitud() < -180 || e.getLongitud() > 180) {
+            throw new IllegalArgumentException("La longitud debe estar entre -180 y 180.");
+        }
         // La zona tiene que estar registrada en el sistema
         if (!zonas.contains(z)) {
             throw new IllegalArgumentException("La zona " + z.getIdZona() + " no está registrada en el sistema.");
