@@ -47,17 +47,25 @@ public class SistemaMeteorologico {
         if (z == null) {
             throw new IllegalArgumentException("La zona no puede ser null.");
         }
+        // El id tiene que ser positivo (el 0 se usa como "todas las zonas" en los reportes)
+        if (z.getIdZona() <= 0) {
+            throw new IllegalArgumentException("El id de la zona debe ser mayor que 0.");
+        }
         // No puede haber dos zonas con el mismo id
         if (buscarZonaPorId(z.getIdZona()) != null) {
             throw new ElementoDuplicadoException("Ya existe una zona con id " + z.getIdZona() + ".");
         }
         zonas.add(z);
     }
- 
+
     public void agregarSensor(Sensor s) throws ElementoDuplicadoException {
         // El sensor no puede ser null
         if (s == null) {
             throw new IllegalArgumentException("El sensor no puede ser null.");
+        }
+        // El id tiene que ser positivo (el 0 se usa como "toda la estación" en mantenimientos)
+        if (s.getIdSensor() <= 0) {
+            throw new IllegalArgumentException("El id del sensor debe ser mayor que 0.");
         }
         // No puede haber dos sensores con el mismo id
         if (buscarSensorPorId(s.getIdSensor()) != null) {
@@ -65,11 +73,15 @@ public class SistemaMeteorologico {
         }
         sensores.add(s);
     }
- 
+
     public void agregarTecnico(ResponsableTecnico t) throws ElementoDuplicadoException {
         // El técnico no puede ser null
         if (t == null) {
             throw new IllegalArgumentException("El técnico no puede ser null.");
+        }
+        // El DNI tiene que ser positivo
+        if (t.getDni() <= 0) {
+            throw new IllegalArgumentException("El DNI del técnico debe ser mayor que 0.");
         }
         // El identificador del técnico es su DNI
         if (buscarTecnicoPorDni(t.getDni()) != null) {
@@ -77,11 +89,15 @@ public class SistemaMeteorologico {
         }
         tecnicos.add(t);
     }
- 
+
     public void agregarEquipo(EquipoRespuesta e) throws ElementoDuplicadoException {
         // El equipo no puede ser null
         if (e == null) {
             throw new IllegalArgumentException("El equipo no puede ser null.");
+        }
+        // El id tiene que ser positivo
+        if (e.getIdEquipo() <= 0) {
+            throw new IllegalArgumentException("El id del equipo debe ser mayor que 0.");
         }
         // No puede haber dos equipos con el mismo id
         if (buscarEquipoPorId(e.getIdEquipo()) != null) {
@@ -89,12 +105,15 @@ public class SistemaMeteorologico {
         }
         equipos.add(e);
     }
- 
-    // Agrega la estación al sistema y a su zona 
+
     public void agregarEstacion(EstacionMeteorologica e, ZonaGeografica z) throws ElementoDuplicadoException {
         // La estación y la zona no pueden ser null
         if (e == null || z == null) {
             throw new IllegalArgumentException("La estación y la zona no pueden ser null.");
+        }
+        // El id tiene que ser positivo
+        if (e.getIdEstacion() <= 0) {
+            throw new IllegalArgumentException("El id de la estación debe ser mayor que 0.");
         }
         // La zona tiene que estar registrada en el sistema
         if (!zonas.contains(z)) {
@@ -237,6 +256,10 @@ public class SistemaMeteorologico {
     // No cambia el estado de la estación ni del sensor: eso se hace con cambiarEstadoEstacion/Sensor
     public Mantenimiento registrarMantenimiento(EstacionMeteorologica est, int id, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor s, ResponsableTecnico r) {
  
+        // El id del mantenimiento tiene que ser positivo
+        if (id <= 0) {
+            throw new IllegalArgumentException("El id del mantenimiento debe ser mayor que 0.");
+        }
         // Si hay un sensor y no pertenece a esa estación, se rechaza
         if (s != null && !est.getSensores().contains(s)) {
             throw new IllegalArgumentException("El sensor " + s.getIdSensor() + " no pertenece a la estación " + est.getNombre() + ".");
