@@ -23,10 +23,7 @@ public class CargadorDatos {
             sistema.agregarTecnico(t4);
  
             // Zonas con sus umbrales (amarilla < naranja < roja)
-            ZonaGeografica z1 = new ZonaGeografica(1, "Cuenca Río Uruguay", NivelVulnerabilidad.ALTO,
-            ZonaGeografica.UMBRAL_AMARILLA_REF,
-            ZonaGeografica.UMBRAL_NARANJA_REF,
-            ZonaGeografica.UMBRAL_ROJA_REF);
+            ZonaGeografica z1 = new ZonaGeografica(1, "Cuenca Río Uruguay", NivelVulnerabilidad.ALTO, 60, 120, 200);
 
             ZonaGeografica z2 = new ZonaGeografica(2, "Cuenca Río Gualeguay", NivelVulnerabilidad.MEDIO,
             ZonaGeografica.UMBRAL_AMARILLA_REF,
