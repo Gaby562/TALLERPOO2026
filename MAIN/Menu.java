@@ -217,13 +217,24 @@ public class Menu {
         } while (opcion != 0);
     }
  
+    
     private void agregarZona() {
         int id = leerEntero("ID: ");
         String nombre = leerTexto("Nombre: ");
         NivelVulnerabilidad nivel = leerEnum(NivelVulnerabilidad.class, "Nivel de vulnerabilidad:");
-        double amarilla = leerDecimal("Umbral amarilla (mm en 24 h): ");
-        double naranja = leerDecimal("Umbral naranja (mm en 24 h): ");
-        double roja = leerDecimal("Umbral roja (mm en 24 h): ");
+
+        double amarilla, naranja, roja;
+        // Se ofrece la escala de referencia de la cátedra (50 / 100 / 150 mm)
+        if (leerTexto("¿Usar la escala de referencia 50/100/150 mm? (s/n): ").equalsIgnoreCase("s")) {
+            amarilla = ZonaGeografica.UMBRAL_AMARILLA_REF;
+            naranja = ZonaGeografica.UMBRAL_NARANJA_REF;
+            roja = ZonaGeografica.UMBRAL_ROJA_REF;
+        } else {
+            amarilla = leerDecimal("Umbral amarilla (mm en 24 h): ");
+            naranja = leerDecimal("Umbral naranja (mm en 24 h): ");
+            roja = leerDecimal("Umbral roja (mm en 24 h): ");
+        }
+
         try {
             sistema.agregarZona(new ZonaGeografica(id, nombre, nivel, amarilla, naranja, roja));
             System.out.println("Zona agregada.");
@@ -231,7 +242,7 @@ public class Menu {
             System.out.println("Error: " + e.getMessage());
         }
     }
- 
+    
     private void agregarEstacion() {
         int id = leerEntero("ID: ");
         String nombre = leerTexto("Nombre: ");

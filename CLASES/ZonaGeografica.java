@@ -21,13 +21,17 @@ public class ZonaGeografica {
     // Contador compartido por todas las zonas: cada alerta recibe un id único
     private static int proximoIdAlerta = 1;
 
+    public static final double UMBRAL_AMARILLA_REF = 50;
+    public static final double UMBRAL_NARANJA_REF = 100;
+    public static final double UMBRAL_ROJA_REF = 150;
+
     //constructor por defecto
     public ZonaGeografica() {
         this.idZona = 0;
         this.nombre = "";
         this.nivelVulnerabilidad = NivelVulnerabilidad.BAJO;
         // Umbrales por defecto que cumplen amarilla < naranja < roja
-        setUmbrales(50, 100, 150);
+        setUmbrales(UMBRAL_AMARILLA_REF, UMBRAL_NARANJA_REF, UMBRAL_ROJA_REF);
         this.nivelAlertaActual = NivelAlerta.VERDE;
         this.estaciones = new ArrayList<>();
         this.valoresHistoricos = new ArrayList<>();

@@ -23,9 +23,16 @@ public class CargadorDatos {
             sistema.agregarTecnico(t4);
  
             // Zonas con sus umbrales (amarilla < naranja < roja)
-            ZonaGeografica z1 = new ZonaGeografica(1, "Cuenca Río Uruguay", NivelVulnerabilidad.ALTO, 50, 100, 150);
-            ZonaGeografica z2 = new ZonaGeografica(2, "Cuenca Río Gualeguay", NivelVulnerabilidad.MEDIO, 40, 80, 120);
- 
+            ZonaGeografica z1 = new ZonaGeografica(1, "Cuenca Río Uruguay", NivelVulnerabilidad.ALTO,
+            ZonaGeografica.UMBRAL_AMARILLA_REF,
+            ZonaGeografica.UMBRAL_NARANJA_REF,
+            ZonaGeografica.UMBRAL_ROJA_REF);
+
+            ZonaGeografica z2 = new ZonaGeografica(2, "Cuenca Río Gualeguay", NivelVulnerabilidad.MEDIO,
+            ZonaGeografica.UMBRAL_AMARILLA_REF,
+            ZonaGeografica.UMBRAL_NARANJA_REF,
+            ZonaGeografica.UMBRAL_ROJA_REF);
+            
             // Valores históricos: un acumulado medio por cada mes del año
             double[] historico1 = {150, 130, 140, 160, 110, 90, 80, 70, 100, 130, 150, 160};
             double[] historico2 = {120, 110, 120, 140, 100, 80, 70, 60, 90, 110, 120, 130};
