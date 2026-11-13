@@ -136,9 +136,6 @@ public class Menu {
         }
     }
 
-    private LocalDate leerFecha(String mensaje) {
-        return leerFecha(mensaje, null);
-    }
 
     // Con Enter se usa la fecha y hora actuales
     private LocalDateTime leerFechaHora(String mensaje) {
