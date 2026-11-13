@@ -6,6 +6,11 @@ import EXCEPCIONES.*;
 import enums.*;
 import java.util.ArrayList;
 
+/**
+ * Pluviómetro instalado en una estación. Compone su historial de
+ * {@link Medicion}: valida cada lectura, detecta las anómalas y
+ * determina si necesita calibración.
+ */
 public class Sensor {
     private int idSensor;
     private String marca;
@@ -14,12 +19,13 @@ public class Sensor {
     private EstadoOperativo estado;
     private LocalDate ultimaCalibracion;
 
-    //relacion con medicion
-    private List<Medicion> mediciones; //cada sensor puede tener 0 o muchas mediciones. Para almacenar el historial de las mediciones
+    /**relacion con medicion.*/
+    private List<Medicion> mediciones; 
 
-    // Contador compartido por todos los sensores: cada medición recibe un id único
+    /**Contador compartido por todos los sensores: cada medición recibe un id único.*/
     private static int proximoIdMedicion = 1;
 
+    /** Constructor sin parametros. Inicializa con valores por defecto.*/
     public Sensor() {
         this.idSensor = 0;
         this.marca = "";
@@ -30,6 +36,16 @@ public class Sensor {
         this.mediciones = new ArrayList<>(); //lista vacia porq cada sensor puede tener cero
     }
 
+    /**
+     * Crea un sensor sin mediciones.
+     *
+     * @param idSensor identificador del sensor
+     * @param marca marca del sensor
+     * @param modelo modelo del sensor
+     * @param precision precisión del sensor
+     * @param estado estado operativo inicial
+     * @param ultimaCalibracion fecha de la última calibración
+     */
     public Sensor(int idSensor, String marca, String modelo, double precision, EstadoOperativo estado, LocalDate ultimaCalibracion) {
         this.idSensor = idSensor;
         this.marca = marca;
@@ -39,116 +55,136 @@ public class Sensor {
         this.ultimaCalibracion = ultimaCalibracion;
         this.mediciones = new ArrayList<>();
     }
- 
+
+    /** Devuelve el identificador del sensor. */
     public int getIdSensor() {
         return idSensor;
     }
 
+    /** Establece el identificador del sensor. */
     public void setIdSensor(int idSensor) {
         this.idSensor = idSensor;
     }
 
+    /** Devuelve la marca del sensor. */
     public String getMarca() {
         return marca;
     }
 
+    /** Establece la marca del sensor. */
     public void setMarca(String marca) {
         this.marca = marca;
     }
 
+    /** Devuelve el modelo del sensor. */
     public String getModelo() {
         return modelo;
     }
 
+    /** Establece el modelo del sensor. */
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
 
+    /** Devuelve la precisión del sensor. */
     public double getPrecision() {
         return precision;
     }
 
+    /** Establece la precisión del sensor. */
     public void setPrecision(double precision) {
         this.precision = precision;
     }
 
+    /** Devuelve el estado operativo del sensor. */
     public EstadoOperativo getEstado() {
         return estado;
     }
 
+    /** Establece el estado operativo del sensor. */
     public void setEstado(EstadoOperativo estado) {
         this.estado = estado;
     }
 
+    /** Devuelve la fecha de la última calibración. */
     public LocalDate getUltimaCalibracion() {
         return ultimaCalibracion;
     }
 
+    /** Establece la fecha de la última calibración. */
     public void setUltimaCalibracion(LocalDate ultimaCalibracion) {
         this.ultimaCalibracion = ultimaCalibracion;
     }
 
+    /** Devuelve el historial de mediciones del sensor. */
     public List<Medicion> getMediciones() {
         return mediciones;
     }
 
+    /** Reemplaza el historial de mediciones del sensor. */
     public void setMediciones(List<Medicion> mediciones) {
         this.mediciones = mediciones;
     }
 
-    //metodo que crea una medicion, comprueba q los mm sean validos,compara la nueva lectura con la anterior para detectar anomalias 
-    //y la agrega a la lista donde esta el historial, con su fecha y hora
-
-    //IMPORTANTE A REVISAR DESPUES: no se pueden registrar lecturas si el sensor o la estación estan en mantenimiento o fuera de servicio
+    
+    /**
+     * Registra una lectura de lluvia. Comprueba que el sensor esté operativo
+     * y que los milímetros sean válidos. Si la lectura difiere en más de
+     * 100 mm de la anterior del mismo sensor, se registra igual pero
+     * queda marcada como anómala. El control del estado de la estación
+     * se hace en el sistema.
+     *
+     * @param mm milímetros registrados (entre 0 y 500)
+     * @param fh fecha y hora de la lectura
+     * @return la medición creada y agregada al historial
+     * @throws LecturaInvalidaException si el sensor no está operativo o los mm están fuera de rango
+     */
     public Medicion registrar(double mm, LocalDateTime fh) throws LecturaInvalidaException {
        
-        // Control operativo: el sensor tiene que estar OPERATIVO
         if (estado != EstadoOperativo.OPERATIVO) {
             throw new LecturaInvalidaException(
                 "El sensor " + idSensor + " no está operativo (estado: " + estado + ").");
         }
-        // Validación del rango físico (0 a 500 mm)
         if (!validar(mm)) {
             throw new LecturaInvalidaException(
                 "Los milímetros deben estar entre 0 y 500."
             );
         }
-
         boolean anomala = false;
-
-        if (!mediciones.isEmpty()) { //isEmpty comprueba si la lista esta vacia, !mediciones.isEmpty significa que la lista contiene al menos una medición
-            Medicion anterior = mediciones.get(mediciones.size() - 1); //busca la ultima medicion de la lista
-
-            if (Math.abs(mm - anterior.getMilimetros()) > 100) { //calcula la diferencia entre los milímetros nuevos y los anteriores
-                anomala = true; //y si es anomala la registramos sin descartarla
+        if (!mediciones.isEmpty()) { 
+            Medicion anterior = mediciones.get(mediciones.size() - 1); 
+            if (Math.abs(mm - anterior.getMilimetros()) > 100) { 
+                anomala = true; 
             }
         }
-        
-        // El id es un número único: se usa el contador y después se incrementa
         int id = proximoIdMedicion++;
         Medicion nueva = new Medicion(id, fh, mm, anomala);
-        mediciones.add(nueva); //guardamos la medicion a la lista del historial
-        return nueva; //y devolvemos la medicion que se creo
+        mediciones.add(nueva); 
+        return nueva; 
     }
 
-    //metodo que compueba que una cantidad de lluvia sea valida (entre 0 y 500) devuelve true o false
+    /**
+     * Comprueba que una cantidad de lluvia esté dentro del rango físico admitido.
+     * @param mm milímetros a validar
+     * @return true si está entre 0 y 500 (inclusive)
+     */
     public boolean validar(double mm) {
         return mm >= 0 && mm <= 500;
     }
 
-    //metodo que dice si el sensor necesita una calibracion y devuelve el resultado de la comparacion con la ult calibracion
-    //plusMonths le suma 12 meses a la ult calibracion y isBefore comprueba si la fecha de vencimiento quedo antes de la fecha actual
+    /**
+     * Indica si el sensor necesita calibración: pasaron más de 12 meses
+     * desde la última, o nunca fue calibrado.
+     * @return true si requiere calibración
+     */
     public boolean requiereCalibracion() {
-
-        // Si no tiene fecha de calibración, necesita calibrarse
         if (ultimaCalibracion == null) {
             return true;
         }
-
-        // Comprueba si pasaron más de 12 meses desde la última calibración
         return ultimaCalibracion.plusMonths(12).isBefore(LocalDate.now());
     }
 
+    /** Devuelve los datos del sensor en formato de texto. */
     @Override
     public String toString() {
         return "SENSOR\n" +

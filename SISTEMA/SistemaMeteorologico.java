@@ -7,6 +7,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * sistema: guarda en memoria las zonas, estaciones, sensores,
+ * técnicos y equipos de respuesta, y aplica las reglas de negocio
+ * (asignación única de sensores, control operativo, disparo de alertas y asignación de emergencias).
+ */
 public class SistemaMeteorologico {
     private List<ZonaGeografica> zonas;
     private List<EstacionMeteorologica> estaciones;
@@ -14,6 +19,7 @@ public class SistemaMeteorologico {
     private List<ResponsableTecnico> tecnicos;
     private List<EquipoRespuesta> equipos;
 
+    /** Crea un sistema vacío, sin datos cargados. */
     public SistemaMeteorologico() {
         this.zonas = new ArrayList<>();
         this.estaciones = new ArrayList<>();
@@ -22,26 +28,38 @@ public class SistemaMeteorologico {
         this.equipos = new ArrayList<>();
     }
 
+    /** Devuelve las zonas registradas. */
     public List<ZonaGeografica> getZonas() {
         return zonas;
     }
 
+    /** Devuelve las estaciones registradas. */
     public List<EstacionMeteorologica> getEstaciones() {
         return estaciones;
     }
 
+    /** Devuelve los sensores registrados. */
     public List<Sensor> getSensores() {
         return sensores;
     }
 
+    /** Devuelve los técnicos registrados. */
     public List<ResponsableTecnico> getTecnicos() {
         return tecnicos;
     }
 
+    /** Devuelve los equipos de respuesta registrados. */
     public List<EquipoRespuesta> getEquipos() {
         return equipos;
     }
 
+    /**
+     * Registra una zona en el sistema.
+     *
+     * @param z zona a registrar
+     * @throws ElementoDuplicadoException si ya existe una zona con el mismo id
+     * @throws IllegalArgumentException si la zona es null o su id no es positivo
+     */
     public void agregarZona(ZonaGeografica z) throws ElementoDuplicadoException {
         // La zona no puede ser null
         if (z == null) {
@@ -58,6 +76,13 @@ public class SistemaMeteorologico {
         zonas.add(z);
     }
 
+    /**
+     * Registra un sensor en el sistema. Todavía no queda instalado en ninguna estación.
+     *
+     * @param s sensor a registrar
+     * @throws ElementoDuplicadoException si ya existe un sensor con el mismo id
+     * @throws IllegalArgumentException si el sensor es null o su id no es positivo
+     */
     public void agregarSensor(Sensor s) throws ElementoDuplicadoException {
         // El sensor no puede ser null
         if (s == null) {
@@ -74,6 +99,13 @@ public class SistemaMeteorologico {
         sensores.add(s);
     }
 
+    /**
+     * Registra un técnico en el sistema. Su identificador es el DNI.
+     *
+     * @param t técnico a registrar
+     * @throws ElementoDuplicadoException si ya existe un técnico con el mismo DNI
+     * @throws IllegalArgumentException si el técnico es null o su DNI no es positivo
+     */
     public void agregarTecnico(ResponsableTecnico t) throws ElementoDuplicadoException {
         // El técnico no puede ser null
         if (t == null) {
@@ -90,6 +122,13 @@ public class SistemaMeteorologico {
         tecnicos.add(t);
     }
 
+    /**
+     * Registra un equipo de respuesta en el sistema.
+     *
+     * @param e equipo a registrar
+     * @throws ElementoDuplicadoException si ya existe un equipo con el mismo id
+     * @throws IllegalArgumentException si el equipo es null o su id no es positivo
+     */
     public void agregarEquipo(EquipoRespuesta e) throws ElementoDuplicadoException {
         // El equipo no puede ser null
         if (e == null) {
@@ -106,6 +145,15 @@ public class SistemaMeteorologico {
         equipos.add(e);
     }
 
+    /**
+     * Registra una estación en el sistema y la agrega a su zona.
+     * Cada estación pertenece a exactamente una zona.
+     *
+     * @param e estación a registrar
+     * @param z zona a la que pertenece, que debe estar registrada
+     * @throws ElementoDuplicadoException si ya existe una estación con el mismo id
+     * @throws IllegalArgumentException si algún dato es null o inválido (id, latitud, longitud o zona no registrada)
+     */
     public void agregarEstacion(EstacionMeteorologica e, ZonaGeografica z) throws ElementoDuplicadoException {
         // La estación y la zona no pueden ser null
         if (e == null || z == null) {
@@ -138,7 +186,13 @@ public class SistemaMeteorologico {
  
     
  
-    // Busca la zona por su id y devuelve null si no existe
+
+    /**
+     * Busca una zona por su id.
+     *
+     * @param id identificador de la zona
+     * @return la zona, o null si no existe
+     */
     public ZonaGeografica buscarZonaPorId(int id) {
         for (ZonaGeografica z : zonas) {
             if (z.getIdZona() == id) {
@@ -148,7 +202,12 @@ public class SistemaMeteorologico {
         return null;
     }
  
-    // Busca la estación por su id y devuelve null si no existe
+    /**
+     * Busca una estación por su id.
+     *
+     * @param id identificador de la estación
+     * @return la estación, o null si no existe
+     */
     public EstacionMeteorologica buscarEstacionPorId(int id) {
         for (EstacionMeteorologica e : estaciones) {
             if (e.getIdEstacion() == id) {
@@ -158,7 +217,13 @@ public class SistemaMeteorologico {
         return null;
     }
  
-    // Busca un sensor por su id y devuelve null si no existe
+
+    /**
+     * Busca un sensor por su id.
+     *
+     * @param id identificador del sensor
+     * @return el sensor, o null si no existe
+     */
     public Sensor buscarSensorPorId(int id) {
         for (Sensor s : sensores) {
             if (s.getIdSensor() == id) {
@@ -168,7 +233,12 @@ public class SistemaMeteorologico {
         return null;
     }
  
-    // Busca el responsable técnico por su DNI y devuelve null si no existe
+    /**
+     * Busca un responsable técnico por su DNI.
+     *
+     * @param dni documento del técnico
+     * @return el técnico, o null si no existe
+     */
     public ResponsableTecnico buscarTecnicoPorDni(int dni) {
         for (ResponsableTecnico t : tecnicos) {
             if (t.getDni() == dni) {
@@ -178,7 +248,12 @@ public class SistemaMeteorologico {
         return null;
     }
  
-    // Busca el equipo de respuesta por su id y devuelve null si no existe
+    /**
+     * Busca un equipo de respuesta por su id.
+     *
+     * @param id identificador del equipo
+     * @return el equipo, o null si no existe
+     */
     public EquipoRespuesta buscarEquipoPorId(int id) {
         for (EquipoRespuesta e : equipos) {
             if (e.getIdEquipo() == id) {
@@ -187,9 +262,12 @@ public class SistemaMeteorologico {
         }
         return null;
     }
- 
- 
-    // Devuelve la estación donde está instalado el sensor, o null si no está en ninguna
+    
+    /**
+     * Busca la estación donde está instalado un sensor.
+     * @param s sensor a ubicar
+     * @return la estación, o null si el sensor no está instalado en ninguna
+     */
     public EstacionMeteorologica buscarEstacionDeSensor(Sensor s) {
         for (EstacionMeteorologica e : estaciones) {
             if (e.getSensores().contains(s)) {
@@ -199,7 +277,12 @@ public class SistemaMeteorologico {
         return null;
     }
  
-    // Devuelve la zona que contiene a la estación, o null si no está en ninguna
+    /**
+     * Busca la zona a la que pertenece una estación.
+     *
+     * @param e estación a ubicar
+     * @return la zona, o null si la estación no pertenece a ninguna
+     */
     public ZonaGeografica buscarZonaDeEstacion(EstacionMeteorologica e) {
         for (ZonaGeografica z : zonas) {
             if (z.getEstaciones().contains(e)) {
@@ -211,7 +294,14 @@ public class SistemaMeteorologico {
  
     // REGLAS DE NEGOCIO
  
-    // Un sensor solo puede estar instalado en una estación a la vez
+    /**
+     * Instala un sensor en una estación. Un sensor solo puede estar
+     * instalado en una estación a la vez.
+     *
+     * @param s sensor a instalar
+     * @param destino estación donde se instala
+     * @throws SensorYaInstaladoException si el sensor ya está instalado en otra estación
+     */
     public void instalarSensor(Sensor s, EstacionMeteorologica destino) throws SensorYaInstaladoException {
         // Busca en qué estación está instalado el sensor ahora (null si no está en ninguna)
         EstacionMeteorologica actual = buscarEstacionDeSensor(s);
@@ -228,7 +318,14 @@ public class SistemaMeteorologico {
         destino.instalarSensor(s);
     }
  
-    // Para trasladar un sensor: primero se lo retira de su estación actual
+    
+    /**
+     * Retira un sensor de la estación donde está instalado. Es el primer
+     * paso para trasladarlo a otra estación.
+     *
+     * @param s sensor a retirar
+     * @throws SensorSinEstacionException si el sensor no está instalado en ninguna estación
+     */
     public void retirarSensor(Sensor s) throws SensorSinEstacionException {
         // Busca en qué estación está instalado el sensor
         EstacionMeteorologica actual = buscarEstacionDeSensor(s);
@@ -241,8 +338,14 @@ public class SistemaMeteorologico {
         actual.retirarSensor(s);
     }
  
-    // Cambia el estado de una estación (OPERATIVO, EN_MANTENIMIENTO o FUERA_DE_SERVICIO)
-    // Devuelve false si falta algún dato o la estación no está registrada en el sistema
+    
+    /**
+     * Cambia el estado operativo de una estación.
+     *
+     * @param e estación a modificar
+     * @param nuevo nuevo estado
+     * @return true si se cambió; false si falta algún dato o la estación no está registrada
+     */
     public boolean cambiarEstadoEstacion(EstacionMeteorologica e, EstadoOperativo nuevo) {
         if (e == null || nuevo == null || !estaciones.contains(e)) {
             return false;
@@ -251,7 +354,12 @@ public class SistemaMeteorologico {
         return true;
     }
  
-    // Cambia el estado de un sensor y devuelve false si falta algún dato o el sensor no está registrado en el sistema
+    /**
+     * Cambia el estado operativo de un sensor.
+     * @param s sensor a modificar
+     * @param nuevo nuevo estado
+     * @return true si se cambió; false si falta algún dato o el sensor no está registrado
+     */
     public boolean cambiarEstadoSensor(Sensor s, EstadoOperativo nuevo) {
         if (s == null || nuevo == null || !sensores.contains(s)) {
             return false;
@@ -260,8 +368,23 @@ public class SistemaMeteorologico {
         return true;
     }
  
-    // Registra el mantenimiento en la estación; si es calibración, actualiza la fecha del sensor
-    // No cambia el estado de la estación ni del sensor: eso se hace con cambiarEstadoEstacion/Sensor
+    
+    /**
+     * Registra un mantenimiento en una estación. Si es de tipo CALIBRACION
+     * y tiene sensor, actualiza la fecha de última calibración del sensor.
+     * No cambia el estado de la estación ni del sensor; eso se hace con
+     * {@link #cambiarEstadoEstacion} y {@link #cambiarEstadoSensor}.
+     *
+     * @param est estación donde se registra
+     * @param id identificador del mantenimiento (positivo)
+     * @param fecha fecha en que se realizó
+     * @param tipo tipo de mantenimiento
+     * @param descripcion descripción de la tarea
+     * @param s sensor intervenido, o null si fue sobre toda la estación
+     * @param r técnico que lo realizó
+     * @return el mantenimiento registrado
+     * @throws IllegalArgumentException si el id no es positivo o el sensor no pertenece a la estación
+     */
     public Mantenimiento registrarMantenimiento(EstacionMeteorologica est, int id, LocalDate fecha, TipoMantenimiento tipo, String descripcion, Sensor s, ResponsableTecnico r) {
  
         // El id del mantenimiento tiene que ser positivo
@@ -285,7 +408,14 @@ public class SistemaMeteorologico {
         return m;
     }
  
-    // Un técnico puede integrar a lo sumo un equipo
+    /**
+     * Agrega un técnico a un equipo de respuesta. Un técnico puede
+     * integrar a lo sumo un equipo.
+     *
+     * @param equipo equipo al que se agrega
+     * @param t técnico a agregar
+     * @throws TecnicoYaAsignadoException si el técnico ya integra un equipo
+     */
     public void agregarIntegrante(EquipoRespuesta equipo, ResponsableTecnico t)throws TecnicoYaAsignadoException {
         // Recorre todos los equipos del sistema
         for (EquipoRespuesta e : equipos) {
@@ -299,7 +429,20 @@ public class SistemaMeteorologico {
         equipo.agregarIntegrante(t);
     }
  
-    // Registra una lectura: controla la estación, guarda la medición y evalúa el riesgo de la zona
+    
+    /**
+     * Registra una lectura de lluvia: controla que el sensor esté instalado
+     * y que la estación esté operativa, guarda la medición y evalúa el riesgo
+     * de la zona (lo que puede generar una alerta).
+     *
+     * @param s sensor que realiza la lectura
+     * @param mm milímetros registrados
+     * @param fh fecha y hora de la lectura
+     * @return la medición creada
+     * @throws SensorSinEstacionException si el sensor no está instalado en ninguna estación
+     * @throws EstacionNoOperativaException si la estación está en mantenimiento o fuera de servicio
+     * @throws LecturaInvalidaException si el sensor no está operativo o los mm están fuera de rango
+     */
     public Medicion registrarLectura(Sensor s, double mm, LocalDateTime fh)
             throws SensorSinEstacionException, EstacionNoOperativaException, LecturaInvalidaException {
  
@@ -332,7 +475,17 @@ public class SistemaMeteorologico {
         return m;
     }
  
-    // Alertas cargadas por un operador: solo CRECIDA_RIO y TORMENTA_SEVERA
+    /**
+     * Registra una alerta cargada por un operador. Solo se admiten los
+     * eventos CRECIDA_RIO y TORMENTA_SEVERA; LLUVIA_COPIOSA la genera el sistema.
+     *
+     * @param z zona afectada
+     * @param ev tipo de evento (CRECIDA_RIO o TORMENTA_SEVERA)
+     * @param nivel nivel de severidad indicado por el operador
+     * @param descripcion descripción de la alerta
+     * @return la alerta creada
+     * @throws IllegalArgumentException si el evento no es CRECIDA_RIO ni TORMENTA_SEVERA
+     */
     public Alerta registrarAlertaOperador(ZonaGeografica z, TipoEventoClimatico ev, NivelAlerta nivel, String descripcion) {
         // Solo se permite registrar CRECIDA_RIO o TORMENTA_SEVERA
         if (ev != TipoEventoClimatico.CRECIDA_RIO && ev != TipoEventoClimatico.TORMENTA_SEVERA) {
@@ -344,7 +497,16 @@ public class SistemaMeteorologico {
         return z.emitirAlerta(ev, nivel, descripcion);
     }
  
-    // Asigna un equipo de respuesta a una alerta que lo necesita
+    
+    /**
+     * Asigna un equipo de respuesta a una alerta NARANJA o ROJA y lo marca
+     * como ocupado.
+     *
+     * @param a alerta que requiere equipo
+     * @param e equipo a asignar
+     * @throws AlertaSinEquipoException si la alerta no requiere equipo o ya tiene uno,
+     *         o si el equipo no tiene integrantes o no está disponible
+     */
     public void asignarEquipo(Alerta a, EquipoRespuesta e) throws AlertaSinEquipoException {
  
         // La alerta tiene que requerir equipo (NARANJA o ROJA)
@@ -372,8 +534,13 @@ public class SistemaMeteorologico {
         e.setDisponible(false);
     }
  
-    // Libera al equipo cuando termina la emergencia
-    // La alerta queda como atendida y conserva el equipo que la atendió
+    /**
+     * Libera al equipo cuando termina la emergencia. La alerta queda como
+     * atendida y conserva el equipo que la atendió.
+     *
+     * @param a alerta atendida
+     * @throws AlertaSinEquipoException si la alerta no tiene equipo asignado
+     */
     public void liberarEquipo(Alerta a) throws AlertaSinEquipoException {
         if (a.getEquipo() == null) {
             throw new AlertaSinEquipoException(
@@ -382,7 +549,10 @@ public class SistemaMeteorologico {
         a.getEquipo().setDisponible(true);
     }
  
-    // Lista los equipos que están disponibles y tienen integrantes
+    /**
+     * Lista los equipos que están disponibles y tienen al menos un integrante.
+     * @return los equipos que pueden atender una emergencia
+     */
     public List<EquipoRespuesta> equiposDisponibles() {
         List<EquipoRespuesta> libres = new ArrayList<>();
         for (EquipoRespuesta e : equipos) {
@@ -393,7 +563,11 @@ public class SistemaMeteorologico {
         return libres;
     }
  
-    // Lista las alertas NARANJA o ROJA que todavía no tienen equipo asignado
+    
+    /**
+     * Lista las alertas NARANJA o ROJA que todavía no tienen equipo asignado.
+     * @return las alertas pendientes de asignación de equipo
+     */
     public List<Alerta> alertasPendientes() {
  
         // Crea una lista vacía para guardar las alertas pendientes

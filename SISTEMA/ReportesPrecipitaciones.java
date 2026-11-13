@@ -11,16 +11,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Reportes de precipitaciones: ranking de estaciones por volumetría,
+ * estadística de anomalía climática e histórico diario, semanal y mensual
+ * comparado con la media histórica de la zona.
+ */
 public class ReportesPrecipitaciones {
     private SistemaMeteorologico sistema;
 
+    /**
+     * Crea el generador de reportes sobre un sistema.
+     * @param sistema sistema del que se toman los datos
+     */
     public ReportesPrecipitaciones(SistemaMeteorologico sistema) {
         this.sistema = sistema;
     }
 
     //RANKING DE ESTACIONES POR VOLUMETRIA
 
-    // Calcula los milímetros acumulados de una estación, entre dos fechas.
+    /**
+     * Calcula los milímetros acumulados por una estación entre dos fechas.
+     *
+     * @param e estación a consultar
+     * @param desde fecha inicial (inclusive)
+     * @param hasta fecha final (inclusive)
+     * @return milímetros acumulados por todos los sensores de la estación
+     */
     public double acumuladoEstacion(EstacionMeteorologica e, LocalDate desde, LocalDate hasta) {
         // Variable donde sumamos los milímetros.
         double total = 0;
@@ -41,7 +57,14 @@ public class ReportesPrecipitaciones {
         return total;
     }
 
-    // Crea un ranking de estaciones de mayor a menor acumulado.
+    /**
+     * Crea el ranking de todas las estaciones del sistema, de mayor
+     * a menor acumulado en el rango de fechas.
+     *
+     * @param desde fecha inicial (inclusive)
+     * @param hasta fecha final (inclusive)
+     * @return la lista de puestos ordenada de mayor a menor acumulado
+     */
     public List<PuestoRanking> rankingEstaciones(LocalDate desde, LocalDate hasta) {
         // Creamos una lista vacía para guardar el ranking.
         List<PuestoRanking> ranking = new ArrayList<>();
@@ -58,8 +81,16 @@ public class ReportesPrecipitaciones {
 
     //ESTADISTICA DE ANOMALIA CLIMATICA
 
-    
-    // Calcula la suma de las precipitaciones de todas las estaciones de una zona durante un mes
+    /**
+     * Calcula la suma de las precipitaciones de todas las estaciones de
+     * una zona durante un mes.
+     *
+     * @param z zona a consultar
+     * @param anio año del período
+     * @param mes mes del período, de 1 a 12
+     * @return milímetros acumulados por la zona en el mes
+     * @throws IllegalArgumentException si el mes no está entre 1 y 12
+     */
     public double acumuladoMensualZona(ZonaGeografica z, int anio, int mes) {
 
         // Verifica que el mes ingresado sea válido
@@ -82,7 +113,14 @@ public class ReportesPrecipitaciones {
         return total;
     }
 
-    // Busca el registro histórico correspondiente al mes indicado dentro de una zona
+    
+    /**
+     * Busca el valor histórico correspondiente a un mes dentro de una zona.
+     *
+     * @param z zona donde se busca
+     * @param mes mes del año, de 1 a 12
+     * @return el valor histórico, o null si no existe un registro para ese mes
+     */
     public ValorHistorico buscarValorHistorico(ZonaGeografica z, int mes) {
 
         // Recorre los valores históricos hasta encontrar el mes solicitado
@@ -96,7 +134,16 @@ public class ReportesPrecipitaciones {
         return null;
     }
 
-    // Calcula el porcentaje de desviación respecto al promedio histórico usando el acumulado recibido
+    
+    /**
+     * Calcula el porcentaje de desviación del acumulado respecto de la
+     * media histórica.
+     *
+     * @param acumulado milímetros acumulados en el mes
+     * @param historico valor histórico del mismo mes
+     * @return el porcentaje de desviación (positivo si llovió más que lo histórico),
+     *         o null si no hay valor histórico o este es cero
+     */
     public Double anomaliaMensual(double acumulado, ValorHistorico historico) {
 
         // No se puede calcular la anomalía si no existe un valor histórico o si es cero
@@ -108,7 +155,17 @@ public class ReportesPrecipitaciones {
         return (acumulado - historico.getAcumuladoMedio()) / historico.getAcumuladoMedio() * 100;
     }
 
-    // Genera un informe con las precipitaciones acumuladas y su desviación respecto al promedio histórico
+    
+    /**
+     * Genera el informe de anomalía climática de una zona para un mes:
+     * acumulado, valor histórico y porcentaje de desviación.
+     *
+     * @param z zona a analizar
+     * @param anio año del período
+     * @param mes mes del período, de 1 a 12
+     * @return el informe en formato de texto
+     * @throws IllegalArgumentException si el mes no está entre 1 y 12
+     */
     public String informeAnomalia(ZonaGeografica z, int anio, int mes) {
 
         // Calcula las precipitaciones acumuladas de la zona durante el mes
@@ -180,7 +237,14 @@ public class ReportesPrecipitaciones {
         return porDia;
     }
 
-    // Recibe una estación y dos fechas.
+    /**
+     * Calcula los milímetros acumulados por día de una estación.
+     *
+     * @param e estación a consultar
+     * @param desde fecha inicial (inclusive)
+     * @param hasta fecha final (inclusive)
+     * @return mapa ordenado por fecha con los milímetros de cada día que tiene lecturas
+     */
     public Map<LocalDate, Double> historicoDiario(EstacionMeteorologica e, LocalDate desde, LocalDate hasta) {
         // Creamos una lista.
         List<EstacionMeteorologica> unaSola = new ArrayList<>();
@@ -190,13 +254,26 @@ public class ReportesPrecipitaciones {
         return acumularPorDia(unaSola, desde, hasta);
     }
 
-    // Recibe una zona y dos fechas.
+    
+    /**
+     * Calcula los milímetros acumulados por día de todas las estaciones de una zona.
+     *
+     * @param z zona a consultar
+     * @param desde fecha inicial (inclusive)
+     * @param hasta fecha final (inclusive)
+     * @return mapa ordenado por fecha con los milímetros de cada día que tiene lecturas
+     */
     public Map<LocalDate, Double> historicoDiario(ZonaGeografica z, LocalDate desde, LocalDate hasta) {
         // Calculamos los milímetros por día de todas las estaciones que pertenecen a esa zona.
         return acumularPorDia(z.getEstaciones(), desde, hasta);
     }
 
-    // Recibe las precipitaciones diarias.
+    
+    /**
+     * Agrupa las precipitaciones diarias por semana.
+     * @param diario precipitaciones por día
+     * @return mapa ordenado donde cada clave es el lunes de la semana y el valor son sus milímetros
+     */
     public Map<LocalDate, Double> acumuladoSemanal(Map<LocalDate, Double> diario) {
         // Creamos un mapa para guardar los acumulados semanales.
         Map<LocalDate, Double> semanal = new TreeMap<>();
@@ -211,7 +288,13 @@ public class ReportesPrecipitaciones {
         return semanal;
     }
 
-    // Recibe las precipitaciones diarias.
+    
+    /**
+     * Agrupa las precipitaciones diarias por mes.
+     *
+     * @param diario precipitaciones por día
+     * @return mapa ordenado por mes con los milímetros acumulados de cada uno
+     */
     public Map<YearMonth, Double> acumuladoMensual(Map<LocalDate, Double> diario) {
         // Creamos un mapa para guardar los acumulados mensuales.
         Map<YearMonth, Double> mensual = new TreeMap<>();
@@ -226,7 +309,16 @@ public class ReportesPrecipitaciones {
         return mensual;
     }
     
-    // Recibe una zona y dos fechas.
+    
+    /**
+     * Compara los acumulados mensuales de una zona con su media histórica
+     * mensual, mostrando el porcentaje de desviación cuando es calculable.
+     *
+     * @param z zona a comparar
+     * @param desde fecha inicial (inclusive)
+     * @param hasta fecha final (inclusive)
+     * @return el informe de comparación en formato de texto
+     */
     public String compararConHistorico(ZonaGeografica z, LocalDate desde, LocalDate hasta) {
         // Obtenemos las precipitaciones diarias de la zona y después las agrupamos por mes.
         Map<YearMonth, Double> mensual = acumuladoMensual(historicoDiario(z, desde, hasta));

@@ -7,16 +7,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Reportes operativos del sistema: informe de fallas y mantenimiento,
+ * ficha técnica de una estación e historial de alertas emitidas.
+ */
 public class ReportesOperativos {
     
     private SistemaMeteorologico sistema;
 
+    /**
+     * Crea el generador de reportes sobre un sistema.
+     * @param sistema sistema del que se toman los datos
+     */
     public ReportesOperativos(SistemaMeteorologico sistema) {
         this.sistema = sistema;
     }
 
     // INFORME DE FALLAS Y MANTENIMIENTO
-    // Genera un informe con las fallas y necesidades de mantenimiento de los sensores
+    
+    /**
+     * Genera el informe de fallas y mantenimiento con tres secciones:
+     * sensores fuera de servicio o en mantenimiento, lecturas anómalas
+     * y sensores que requieren calibración.
+     *
+     * @return el informe en formato de texto
+     */
     public String informeFallas() {
 
         // Guarda el título del informe
@@ -130,10 +145,17 @@ public class ReportesOperativos {
     }
 
     //FICHA TECNICA DE UNA ESTACION
-    // Cantidad de últimas lecturas que se mostrarán por sensor
+    /** Cantidad de últimas lecturas que se mostrarán por sensor.*/
     private static final int CANTIDAD_ULTIMAS = 3;
 
     // Método que genera la ficha técnica de una estación
+    /**
+     * Genera la ficha técnica operativa de una estación: datos generales,
+     * zona, responsable técnico y estado de cada sensor con sus últimas 3 lecturas.
+     *
+     * @param e estación de la que se arma la ficha
+     * @return la ficha en formato de texto
+     */
     public String fichaTecnica(EstacionMeteorologica e) {
 
         // Guarda los datos generales de la estación
@@ -217,8 +239,17 @@ public class ReportesOperativos {
     
     //HISTORIAL DE ALERTAS EMITIDAS
 
-    // Busca alertas según el nivel, las fechas y la zona.
-    // Si nivel o zona son null, no se aplica ese filtro.
+    /**
+     * Busca las alertas emitidas según nivel, rango de fechas y zona,
+     * ordenadas de la más reciente a la más antigua. Si {@code nivel}
+     * o {@code zona} son null, no se aplica ese filtro.
+     *
+     * @param nivel nivel de severidad buscado, o null para todos
+     * @param desde fecha inicial del rango (inclusive)
+     * @param hasta fecha final del rango (inclusive)
+     * @param zona zona buscada, o null para todas
+     * @return la lista de alertas que cumplen los filtros
+     */
     public List<Alerta> historialAlertas(NivelAlerta nivel, LocalDate desde, LocalDate hasta, ZonaGeografica zona) {
 
         // Creamos una lista vacía para guardar las alertas encontradas.
